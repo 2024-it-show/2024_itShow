@@ -11,6 +11,7 @@ int main()
     Font font;
     auto a = font.loadFromFile("설레임.ttf");
 
+
     RenderWindow app(VideoMode(1280, 720), "game");
 
     Texture back[20];
