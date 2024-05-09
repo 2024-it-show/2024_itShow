@@ -4,10 +4,12 @@
 using namespace std;
 using namespace sf;
 
+int Number = 0; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+
 
 int main()
 {
-
+    
     Font font;
     auto a = font.loadFromFile("설레임.ttf");
 
@@ -31,16 +33,18 @@ int main()
     back[13].loadFromFile("Jch1.png");
     back[14].loadFromFile("JchB.png");
     back[15].loadFromFile("JchG.png");
+    back[16].loadFromFile("Jch2.png");
+    back[17].loadFromFile("ch(13).png");
     Sprite background[20];
     for (int i = 0; i < 20; i++) {
         background[i].setTexture(back[i]);
         background[i].setScale(0.25f, 0.25f);
     }
-
     bool Screen1 = true;
     bool Hch1 = false, Hch1_2 = false, HchB = false, HchG = false, Hch2 = false;
     bool Mch1 = false, Mch1_2 = false, Mch1B = false, Mch1G = false, Mch2 = false, Mch2B = false, Mch2G = false;
-    bool Jch1 = false, JchG = false, JchB = false;
+    bool Jch1 = false, JchG = false, JchB = false, Jch2 = false, Jch= false;
+    bool Ch13 = false;
     Texture* block = new Texture[24];
     block[0].loadFromFile("1.png");
     block[1].loadFromFile("2.png");
@@ -159,7 +163,8 @@ int main()
     chSB.setTexture(speech);
     chSB.setScale(0.25f, 0.25f);
     chSB.setPosition(327, 120);
-
+    
+    // popup
     Texture pop[4];
     pop[0].loadFromFile("pop1.png");
     pop[1].loadFromFile("pop2.png");
@@ -173,20 +178,68 @@ int main()
     }
 
     bool popup1 = false, popup2 = false, popup3 = false, popup4 = false;
-    Text text;
-    text.setFont(font);
-    // font는 sf::Font의 객체입니다.
 
-    // 보여줄 문자열 세팅
-    text.setString("안녕하세요");
+    Texture popBack;
+    popBack.loadFromFile("pop-back.png");
+    Sprite PopUpBack;
+    PopUpBack.setTexture(popBack);
+    PopUpBack.setScale(0.25f, 0.25f);
 
-    // 문자 사이즈 세팅
-    text.setCharacterSize(24);
-    text.setPosition(880, 206);
-    // 포인트과 아니라 픽셀 단위입니다!
 
-    // 색 설정
-    text.setFillColor(sf::Color::Red);
+    //text
+    Text text1, text2;
+    text1.setFont(font);
+    text2.setFont(font);
+    text1.setString(L"안녕하세요");
+    text2.setString(L"안녕하세요");
+    text1.setCharacterSize(120);
+    text2.setCharacterSize(120);
+    text1.setScale(0.25f, 0.25f);
+    text2.setScale(0.25f, 0.25f);
+    text1.setFillColor(sf::Color(67, 64, 64));
+    text2.setFillColor(sf::Color(67, 64, 64));
+    bool chText = false;
+
+    Text chSBText;
+    chSBText.setFont(font);
+    chSBText.setString(L"안녕하세요");
+    chSBText.setCharacterSize(144);
+    chSBText.setScale(0.25f, 0.25f);
+    chSBText.setFillColor(sf::Color(67, 64, 64));
+    bool chSBTEXT = false;
+    
+    // Ch13
+    Texture choice13[3];
+    choice13[0].loadFromFile("ch13H.png");
+    choice13[1].loadFromFile("ch13M.png");
+    choice13[2].loadFromFile("ch13J.png");
+    Sprite chB13[3];
+    for (int i = 0; i < 3; i++) {
+        chB13[i].setTexture(choice13[i]);
+        chB13[i].setScale(0.25f, 0.25f);
+    }
+    chB13[0].setPosition(516.57, 218);
+    chB13[1].setPosition(832.14, 218);
+    chB13[2].setPosition(201, 218);
+    Texture chB13hover[3];
+    chB13hover[0].loadFromFile("ch13HBh.png");
+    chB13hover[1].loadFromFile("ch13MBh.png");
+    chB13hover[2].loadFromFile("ch13JBh.png");
+    bool Ch13B = false, Ch13HMJ[3] = { false };
+
+    // Click // 지수민소리 여기서 setPosition만 해주면 되는데 칸마다 다르게 해줘야 해
+    // 그니까 Number 두고 switch나 if로 2부터 24까지(for문X) 조건 줘서 피그마 보고 x,y 따와서 세팅하면 돼용 
+    Texture click[4];
+    click[0].loadFromFile("click2~7.png");
+    click[1].loadFromFile("click8~13.png");
+    click[2].loadFromFile("click14~19.png");
+    click[3].loadFromFile("click20~24.png");
+    Sprite Click[4];
+    for (int i = 0; i < 4; i++) {
+        Click[i].setTexture(click[i]);
+        Click[i].setScale(0.25f, 0.25f);
+    }
+
 
     while (app.isOpen())
     {
@@ -226,14 +279,37 @@ int main()
                         else if (i == 11 && Screen1) {
                             Screen1 = false;
                             Hch2 = true;
+                            text1.setString(L"전 카라멜 팝콘 좋아해요");
+                            text1.setPosition(862, 225);
+                            text2.setString(L"전 민트초코 팝콘 좋아해요");
+                            text2.setPosition(848, 452);
                         }
                         else if (i == 14 && Screen1) {
                             Screen1 = false;
                             Jch1 = true;
+                            text1.setString(L"가는데 10분 정도 걸리니까\n지금 나가야겠네요");
+                            text1.setPosition(845, 206);
+                            text2.setString(L"에이 천천히 가도 괜찮아요");
+                            text2.setPosition(848, 452);
                         }
                         else if (i == 18 && Screen1) {
                             Screen1 = false;
                             Mch2 = true;
+                            text1.setString(L"(장난스럽게) 하하\n이래서 그만두셨구나");
+                            text1.setPosition(882, 206);
+                            text2.setString(L"그래도 잘하시네요\n역시 선수 출신!");
+                            text2.setPosition(896, 433);
+                        }
+                        else if (i == 20 && Screen1) {
+                            Jch2 = true;
+                            Screen1 = false;
+                            text1.setString(L"아뇨, 이제 씻어야죠");
+                            text1.setPosition(888, 226);
+                            text2.setString(L"에이 괜찮아요~\n어차피 장갑 낄 건데요");
+                            text2.setPosition(875, 432);
+                        }
+                        else if (i == 12 && Screen1) {
+                            Ch13 = true;
                         }
                         else if (i == 7 && Screen1) {
                             popup1 = true;
@@ -270,15 +346,24 @@ int main()
                         if (i == 1 && Hch1) {
                             Hch1 = false;
                             Hch1_2 = true;
+                            text1.setString(L"이거 재미없나봐요\n저희 다른 거 볼까요? ");
+                            text1.setPosition(880, 206);
+                            text2.setString(L"그래도 이미 예매했는데\n그냥 볼까요? ");
+                            text2.setPosition(865, 433);
                         }
                         else if (i == 1 && Mch1) {
                             Mch1 = false;
                             Mch1_2 = true;
+                            text1.setString(L"김치가 다 떨어졌나요?\n하하 농담~");
+                            text1.setPosition(870, 206);
+                            text2.setString(L"혹시 주문이\n잘못 들어갔나요?");
+                            text2.setPosition(901, 433);
                         }
-                        else if (i == 2 && (HchB || HchG || Mch1G || Mch1B || Mch2G || Mch2B || JchB || JchG)) {
+                        else if (i == 2 && (HchB || HchG || Mch1G || Mch1B || Mch2G || Mch2B || JchB || JchG || Ch13)) {
                             HchB = false, HchG = false;
                             Mch1G = false, Mch1B = false, Mch2G = false, Mch2B = false;
                             JchB = false, JchG = false;
+                            Ch13 = false; chSBTEXT = false;
                             Screen1 = true;
                         }
                         else if (i == 0 && Screen1) {
@@ -308,47 +393,116 @@ int main()
                 if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                     if (chbutton[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
                         if (i == 0 && (Hch1_2 || Hch2)) {
+                            if (Hch2) {
+                                chSBText.setString(L"전 카라멜은\n     별로...");
+                                chSBText.setPosition(397, 192);
+                            }
+                            if (Hch1_2) {
+                                chSBText.setString(L"( 아.. 줏대가 없네 )");
+                                chSBText.setPosition(343, 213.99);
+                            }
+                            chText = false;
                             Hch1_2 = false;
                             Hch2 = false;
                             HchB = true;
                         }
                         else if (i == 1 && (Hch1_2 || Hch2)) {
+                            if (Hch2) {
+                                chSBText.setString(L"저도 민초\n좋아해요!");
+                                chSBText.setPosition(412, 192);
+                            }
+                            if (Hch1_2) {
+                                chSBText.setString(L"\t\t좋아요!\n(줏대있다!멋져)");
+                                chSBText.setPosition(370, 193);
+                            }
+                            chText = false;
                             Hch1_2 = false;
                             Hch2 = false;
                             HchG = true;
                         }
-                        if (i == 0 && Mch1_2 || Mch2) {
+                        if (i == 0 && (Mch1_2 || Mch2)) {
                             if (Mch1_2) {
+                                chSBText.setString(L"  ( 저게 무슨\n말버릇이람..)");
+                                chSBText.setPosition(379, 187.99);
                                 Mch1B = true;
                             }
                             else if (Mch2) {
+                                chSBText.setString(L"\t부상 때문에\n잘 안되네요 ㅎㅎ;");
+                                chSBText.setPosition(360, 187.99);
                                 Mch2B = true;
                             }
+                            chText = false;
                             Mch1_2 = false;
                             Mch2 = false;
                         }
                         else if (i == 1 && (Mch1_2 || Mch2)) {
                             if (Mch1_2) {
+                                chSBText.setString(L"( 아주 예의가\n   바르구만 )");
+                                chSBText.setPosition(386, 187.99);
                                 Mch1G = true;
                             }
                             else if (Mch2) {
+                                chSBText.setString(L"하하 아녜요\n  고마워요");
+                                chSBText.setPosition(397, 187.99);
                                 Mch2G = true;
                             }
+                            chText = false;
                             Mch1_2 = false;
                             Mch2 = false;
                         }
-                        if (i == 0 && Jch1) {
+                        if (i == 0 && (Jch1 || Jch)) {
+                            if (Jch1) {
+                                chSBText.setString(L"   아... 되게\n칼같으시네요");
+                                chSBText.setPosition(385, 187.99);
+                            }
+                            else if (Jch) {
+                                chSBText.setString(L"( 왜 저렇게\n깔끔떨지 ? )");
+                                chSBText.setPosition(395, 191);
+                            }
+                            chText = false;
                             Jch1 = false;
+                            Jch2 = false;
                             JchB = true;
+                            Jch = false;
                         }
-                        else if (i == 1 && (Jch1)) {
+                        else if (i == 1 && (Jch1 || Jch)) {
+                            if (Jch1) {
+                                chSBText.setString(L"( 여유롭네\n  멋있어!)");
+                                chSBText.setPosition(406, 193);
+                            }
+                            else if (Jch) {
+                                chSBText.setString(L"( 털털한 성격\n\t  좋다!)");
+                                chSBText.setPosition(386, 198);
+                            }
+                            chText = false;
                             Jch1 = false;
+                            Jch2 = false;
                             JchG = true;
+                            Jch = false;
                         }
                     }
                 }
             }
-        }
+                for (int i = 0; i < 3; i++) {
+
+                    if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+                        if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+                            Ch13B = true;
+                            for (int j = 0; j < 3; j++) {
+                                if (i == j) {
+                                    chB13[j].setTexture(chB13hover[j]);
+                                    Ch13HMJ[j] = true;
+                                }
+                                else {
+                                    chB13[j].setTexture(choice13[j]);
+                                    Ch13HMJ[j] = false;
+                                }
+                            }
+                        }
+                        if(!Ch13B) chB13[i].setTexture(choice13[i]);
+                    }
+                }
+            }
         if (Screen1) {
             app.draw(background[0]);
             for (int i = 23; i >= 0; i--) {
@@ -356,6 +510,8 @@ int main()
                 app.draw(button[i]);
             }
             app.draw(button[20]);
+            for (int i = 0; i < 3; i++) Ch13HMJ[i] = false;
+            Ch13B = false;
         }
 
         //Hch
@@ -363,9 +519,11 @@ int main()
             app.draw(background[1]);
         }
         else if (Hch2) {
+            chText = true;
             app.draw(background[5]);
         }
         else if (Hch1_2) {
+            chText = true;
             app.draw(background[2]);
         }
         else if (HchB) {
@@ -380,9 +538,11 @@ int main()
             app.draw(background[6]);
         }
         else if (Mch2) {
+            chText = true;
             app.draw(background[10]);
         }
         else if (Mch1_2) {
+            chText = true;
             app.draw(background[7]);
         }
         else if (Mch1B) {
@@ -391,17 +551,22 @@ int main()
         else if (Mch1G) {
             app.draw(background[9]);
         }
-        else if (Mch2B) {
-            app.draw(background[11]);
-        }
         else if (Mch2G) {
             app.draw(background[12]);
+        }
+        else if (Mch2B) {
+            app.draw(background[11]);
         }
 
         //Jch
         if (Jch1) {
             app.draw(background[13]);
-            app.draw(text);
+            chText = true;
+        }
+        else if (Jch2) {
+            app.draw(background[16]);
+            chText = true;
+            Jch = true;
         }
         else if (JchB) {
             app.draw(background[14]);
@@ -410,22 +575,43 @@ int main()
             app.draw(background[15]);
         }
 
+        // Ch13
+        if (Ch13) {
+            Screen1 = false;
+            app.draw(background[17]);
+            for (int i = 0; i <3; i++)   app.draw(chB13[i]);
+        }
+        if (Screen1) {
+            if (Ch13HMJ[0]) {
+                // 한솔 호감도 상승
+            }
+            else if (Ch13HMJ[1]) {
+                // 민재 호감도 상승
+            }
+            else if (Ch13HMJ[2]) {
+                // 재현 호감도 상승
+            }
+        }
 
 
         if (Hch1 || Mch1) {
             app.draw(nextbutton[1]);
         }
-        if (Hch1_2 || Hch2 || Mch1_2 || Mch2 || Jch1) {
+        if (Hch1_2 || Hch2 || Mch1_2 || Mch2 || Jch1||Jch2 ) {
             app.draw(chbutton[0]);
             app.draw(chbutton[1]);
         }
         if (HchB || HchG || Mch1B || Mch1G || Mch2B || Mch2G || JchB || JchG) {
             app.draw(nextbutton[2]);
             app.draw(chSB);
+            chSBTEXT = true;
+        }
+        if (Ch13 && Ch13B) {
+            app.draw(nextbutton[2]);
         }
 
         if (popup1 || popup2 || popup3 || popup4) {
-
+            app.draw(PopUpBack);
             if (popup1) {
                 app.draw(PopUp[0]);
             }
@@ -440,6 +626,14 @@ int main()
             }
             app.draw(nextbutton[0]);
         }
+
+        if (chText) {
+            app.draw(text1);
+            app.draw(text2);
+        }
+        if (chSBTEXT) {
+            app.draw(chSBText);
+        }
         app.display();
     }
     delete[] block;
@@ -447,4 +641,5 @@ int main()
     delete[] button;
 
     return 0;
+
 }
