@@ -4,7 +4,7 @@
 using namespace std;
 using namespace sf;
 
-int Number = 7; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+int Number = 10; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
 int Jheart = 0;
 int Hheart = 0;
 int Mheart = 0;
@@ -596,98 +596,98 @@ int main()
         switch (Number) {
             // click2~7
         case 2:
-            Click[0].setPosition(826, 457);
+            Click[0].setPosition(867, 457);
             app.draw(Click[0]);
             break;
         case 3:
-            Click[0].setPosition(720, 457);
+            Click[0].setPosition(761, 457);
             app.draw(Click[0]);
             break;
         case 4:
-            Click[0].setPosition(614, 457);
+            Click[0].setPosition(655, 457);
             app.draw(Click[0]);
             break;
         case 5:
-            Click[0].setPosition(508, 457);
+            Click[0].setPosition(549, 457);
             app.draw(Click[0]);
             break;
         case 6:
-            Click[0].setPosition(402, 457);
+            Click[0].setPosition(443, 457);
             app.draw(Click[0]);
             break;
         case 7:
-            Click[0].setPosition(296, 457);
+            Click[0].setPosition(337, 457);
             app.draw(Click[0]);
             break;
             // click8~13
         case 8:
-            Click[1].setPosition(289, 574);
+            Click[1].setPosition(395, 582);
             app.draw(Click[1]);
             break;
         case 9:
-            Click[1].setPosition(333, 474);
+            Click[1].setPosition(344, 474);
             app.draw(Click[1]);
             break;
         case 10:
-            Click[1].setPosition(333, 368);
+            Click[1].setPosition(344, 368);
             app.draw(Click[1]);
             break;
         case 11:
-            Click[1].setPosition(333, 262);
+            Click[1].setPosition(344, 262);
             app.draw(Click[1]);
             break;
         case 12:
-            Click[1].setPosition(333, 156);
+            Click[1].setPosition(344, 156);
             app.draw(Click[1]);
             break;
         case 13:
-            Click[1].setPosition(189, 50);
+            Click[1].setPosition(395, 54);
             app.draw(Click[1]);
             break;
             // click14~19
         case 14:
-            Click[2].setPosition(296, 160);
+            Click[2].setPosition(867, 160);
             app.draw(Click[2]);
             break;
         case 15:
-            Click[2].setPosition(402, 160);
+            Click[2].setPosition(761, 160);
             app.draw(Click[2]);
             break;
         case 16:
-            Click[2].setPosition(508, 160);
+            Click[2].setPosition(655, 160);
             app.draw(Click[2]);
             break;
         case 17:
-            Click[2].setPosition(614, 160);
+            Click[2].setPosition(549, 160);
             app.draw(Click[2]);
             break;
         case 18:
-            Click[2].setPosition(720, 160);
+            Click[2].setPosition(443, 160);
             app.draw(Click[2]);
             break;
         case 19:
-            Click[2].setPosition(826, 160);
+            Click[2].setPosition(337, 160);
             app.draw(Click[2]);
             break;
             // click20~24
         case 20:
-            Click[3].setPosition(987, 50);
+            Click[3].setPosition(886, 54);
             app.draw(Click[3]);
             break;
         case 21:
-            Click[3].setPosition(945, 156);
+            Click[3].setPosition(834, 156);
             app.draw(Click[3]);
             break;
         case 22:
-            Click[3].setPosition(945, 262);
+            Click[3].setPosition(834, 262);
             app.draw(Click[3]);
             break;
         case 23:
-            Click[3].setPosition(945, 368);
+            Click[3].setPosition(834, 368);
             app.draw(Click[3]);
             break;
         case 24:
-            Click[3].setPosition(945, 474);
+            Click[3].setPosition(834, 474);
             app.draw(Click[3]);
             break;
         }
