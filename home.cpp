@@ -4,7 +4,11 @@
 using namespace std;
 using namespace sf;
 
-int Number = 0; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+int Number = 7; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+int Jheart = 0;
+int Hheart = 0;
+int Mheart = 0;
+int Xheart = 0;
 
 
 int main()
@@ -13,8 +17,10 @@ int main()
     Font font;
     auto a = font.loadFromFile("설레임.ttf");
 
+    const unsigned int originalWidth = 1280;
+    const unsigned int originalHeight = 720;
 
-    RenderWindow app(VideoMode(1280, 720), "game");
+    RenderWindow app(VideoMode(originalWidth, originalHeight), "game");
 
     Texture back[20];
     back[0].loadFromFile("game-back.png");
@@ -240,6 +246,38 @@ int main()
         Click[i].setScale(0.25f, 0.25f);
     }
 
+    // 재현 호감도
+    Text JheartS;
+    JheartS.setFont(font);
+    JheartS.setCharacterSize(112);
+    JheartS.setScale(0.25f, 0.25f);
+    JheartS.setFillColor(sf::Color(255,120, 135));
+    JheartS.setPosition(130, 253);
+    char buffer1[4]; // "%3d"는 최대 3자리까지 표시하므로 4자리 배열이 필요함
+    // 한솔 호감도
+    Text HheartS;
+    HheartS.setFont(font);
+    HheartS.setCharacterSize(112);
+    HheartS.setScale(0.25f, 0.25f);
+    HheartS.setFillColor(sf::Color(103, 156, 68));
+    HheartS.setPosition(1162, 253);
+    char buffer2[4]; // "%3d"는 최대 3자리까지 표시하므로 4자리 배열이 필요함
+    // 민재 호감도
+    Text MheartS;
+    MheartS.setFont(font);
+    MheartS.setCharacterSize(112);
+    MheartS.setScale(0.25f, 0.25f);
+    MheartS.setFillColor(sf::Color(13, 85, 109));
+    MheartS.setPosition(130, 550);
+    char buffer3[4]; // "%3d"는 최대 3자리까지 표시하므로 4자리 배열이 필요함
+    // X 호감도
+    Text XheartS;
+    XheartS.setFont(font);
+    XheartS.setCharacterSize(112);
+    XheartS.setScale(0.25f, 0.25f);
+    XheartS.setFillColor(sf::Color(65, 58, 57));
+    XheartS.setPosition(1162, 550);
+    char buffer4[4]; // "%3d"는 최대 3자리까지 표시하므로 4자리 배열이 필요함
 
     while (app.isOpen())
     {
@@ -249,6 +287,16 @@ int main()
         {
             if (event.type == Event::Closed)
                 app.close();
+            else if (event.type == sf::Event::Resized)
+            {
+                float aspectRatio = static_cast<float>(originalWidth) / originalHeight;
+                unsigned int newHeight = event.size.height;
+                unsigned int newWidth = static_cast<unsigned int>(newHeight * aspectRatio);
+                app.setSize(sf::Vector2u(newWidth, newHeight));
+                sf::Vector2u windowSize = app.getSize();
+                sf::Vector2i newPosition((static_cast<int>(sf::VideoMode::getDesktopMode().width) - static_cast<int>(windowSize.x)) / 2,0); // 화면의 상단 좌표를 사용하여 Y 좌표를 0으로 설정
+                app.setPosition(newPosition);
+            }
 
             Vector2f mousePos = app.mapPixelToCoords(Mouse::getPosition(app));
             for (int i = 0; i < 24; i++) {
@@ -313,15 +361,25 @@ int main()
                         }
                         else if (i == 7 && Screen1) {
                             popup1 = true;
+                            Hheart -= 10;
+                            Jheart -= 10;
+                            Mheart -= 10;
                         }
                         else if (i == 15 && Screen1) {
                             popup2 = true;
+                            Hheart += 15;
+                            Jheart += 15;
+                            Mheart += 15;
                         }
                         else if (i == 19 && Screen1) {
                             popup3 = true;
+                            Xheart += 20;
                         }
                         else if (i == 23 && Screen1) {
                             popup4 = true;
+                            Hheart -= 15;
+                            Jheart -= 15;
+                            Mheart -= 15;
                         }
                     }
                 }
@@ -401,6 +459,7 @@ int main()
                                 chSBText.setString(L"( 아.. 줏대가 없네 )");
                                 chSBText.setPosition(343, 213.99);
                             }
+                            Hheart -= 20;
                             chText = false;
                             Hch1_2 = false;
                             Hch2 = false;
@@ -415,6 +474,7 @@ int main()
                                 chSBText.setString(L"\t\t좋아요!\n(줏대있다!멋져)");
                                 chSBText.setPosition(370, 193);
                             }
+                            Hheart += 20;
                             chText = false;
                             Hch1_2 = false;
                             Hch2 = false;
@@ -431,6 +491,7 @@ int main()
                                 chSBText.setPosition(360, 187.99);
                                 Mch2B = true;
                             }
+                            Mheart -= 20;
                             chText = false;
                             Mch1_2 = false;
                             Mch2 = false;
@@ -446,6 +507,7 @@ int main()
                                 chSBText.setPosition(397, 187.99);
                                 Mch2G = true;
                             }
+                            Mheart += 20;
                             chText = false;
                             Mch1_2 = false;
                             Mch2 = false;
@@ -459,6 +521,7 @@ int main()
                                 chSBText.setString(L"( 왜 저렇게\n깔끔떨지 ? )");
                                 chSBText.setPosition(395, 191);
                             }
+                            Jheart -= 20;
                             chText = false;
                             Jch1 = false;
                             Jch2 = false;
@@ -474,6 +537,7 @@ int main()
                                 chSBText.setString(L"( 털털한 성격\n\t  좋다!)");
                                 chSBText.setPosition(386, 198);
                             }
+                            Jheart += 20;
                             chText = false;
                             Jch1 = false;
                             Jch2 = false;
@@ -503,6 +567,16 @@ int main()
                     }
                 }
             }
+
+            std::snprintf(buffer1, sizeof(buffer1), "%3d", Jheart);
+            JheartS.setString(buffer1);
+            std::snprintf(buffer2, sizeof(buffer2), "%3d", Hheart);
+            HheartS.setString(buffer2);
+            std::snprintf(buffer3, sizeof(buffer3), "%3d", Mheart);
+            MheartS.setString(buffer3);
+            std::snprintf(buffer4, sizeof(buffer4), "%3d", Xheart);
+            XheartS.setString(buffer4);
+
         if (Screen1) {
             app.draw(background[0]);
             for (int i = 23; i >= 0; i--) {
@@ -512,6 +586,110 @@ int main()
             app.draw(button[20]);
             for (int i = 0; i < 3; i++) Ch13HMJ[i] = false;
             Ch13B = false;
+            app.draw(JheartS);
+            app.draw(HheartS);
+            app.draw(MheartS);
+            app.draw(XheartS);
+        }
+
+        // 주사위 Click 이미지
+        switch (Number) {
+            // click2~7
+        case 2:
+            Click[0].setPosition(826, 457);
+            app.draw(Click[0]);
+            break;
+        case 3:
+            Click[0].setPosition(720, 457);
+            app.draw(Click[0]);
+            break;
+        case 4:
+            Click[0].setPosition(614, 457);
+            app.draw(Click[0]);
+            break;
+        case 5:
+            Click[0].setPosition(508, 457);
+            app.draw(Click[0]);
+            break;
+        case 6:
+            Click[0].setPosition(402, 457);
+            app.draw(Click[0]);
+            break;
+        case 7:
+            Click[0].setPosition(296, 457);
+            app.draw(Click[0]);
+            break;
+            // click8~13
+        case 8:
+            Click[1].setPosition(289, 574);
+            app.draw(Click[1]);
+            break;
+        case 9:
+            Click[1].setPosition(333, 474);
+            app.draw(Click[1]);
+            break;
+        case 10:
+            Click[1].setPosition(333, 368);
+            app.draw(Click[1]);
+            break;
+        case 11:
+            Click[1].setPosition(333, 262);
+            app.draw(Click[1]);
+            break;
+        case 12:
+            Click[1].setPosition(333, 156);
+            app.draw(Click[1]);
+            break;
+        case 13:
+            Click[1].setPosition(189, 50);
+            app.draw(Click[1]);
+            break;
+            // click14~19
+        case 14:
+            Click[2].setPosition(296, 160);
+            app.draw(Click[2]);
+            break;
+        case 15:
+            Click[2].setPosition(402, 160);
+            app.draw(Click[2]);
+            break;
+        case 16:
+            Click[2].setPosition(508, 160);
+            app.draw(Click[2]);
+            break;
+        case 17:
+            Click[2].setPosition(614, 160);
+            app.draw(Click[2]);
+            break;
+        case 18:
+            Click[2].setPosition(720, 160);
+            app.draw(Click[2]);
+            break;
+        case 19:
+            Click[2].setPosition(826, 160);
+            app.draw(Click[2]);
+            break;
+            // click20~24
+        case 20:
+            Click[3].setPosition(987, 50);
+            app.draw(Click[3]);
+            break;
+        case 21:
+            Click[3].setPosition(945, 156);
+            app.draw(Click[3]);
+            break;
+        case 22:
+            Click[3].setPosition(945, 262);
+            app.draw(Click[3]);
+            break;
+        case 23:
+            Click[3].setPosition(945, 368);
+            app.draw(Click[3]);
+            break;
+        case 24:
+            Click[3].setPosition(945, 474);
+            app.draw(Click[3]);
+            break;
         }
 
         //Hch
@@ -573,6 +751,7 @@ int main()
         }
         else if (JchG) {
             app.draw(background[15]);
+            
         }
 
         // Ch13
