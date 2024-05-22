@@ -4,7 +4,7 @@
 using namespace std;
 using namespace sf;
 
-int Number = 10; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+int Number = 1; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
 int Jheart = 0;
 int Hheart = 0;
 int Mheart = 0;
@@ -22,7 +22,8 @@ int main()
 
     RenderWindow app(VideoMode(originalWidth, originalHeight), "game");
 
-    Texture back[20];
+
+    Texture back[30];
     back[0].loadFromFile("game-back.png");
     back[1].loadFromFile("Hch1.png");
     back[2].loadFromFile("Hch1-2.png");
@@ -41,8 +42,15 @@ int main()
     back[15].loadFromFile("JchG.png");
     back[16].loadFromFile("Jch2.png");
     back[17].loadFromFile("ch(13).png");
-    Sprite background[20];
-    for (int i = 0; i < 20; i++) {
+    back[18].loadFromFile("Hbasic1.png");
+    back[19].loadFromFile("Hbasic2.png");
+    back[20].loadFromFile("Jbasic1.png");
+    back[21].loadFromFile("Jbasic2.png");
+    back[22].loadFromFile("Mbasic1.png");
+    back[23].loadFromFile("Mbasic2.png");
+    back[24].loadFromFile("Xbasic.png");
+    Sprite background[30];
+    for (int i = 0; i < 30; i++) {
         background[i].setTexture(back[i]);
         background[i].setScale(0.25f, 0.25f);
     }
@@ -50,6 +58,7 @@ int main()
     bool Hch1 = false, Hch1_2 = false, HchB = false, HchG = false, Hch2 = false;
     bool Mch1 = false, Mch1_2 = false, Mch1B = false, Mch1G = false, Mch2 = false, Mch2B = false, Mch2G = false;
     bool Jch1 = false, JchG = false, JchB = false, Jch2 = false, Jch= false;
+    bool Hbasic1 = false, Hbasic2 = false, Jbasic1 = false, Jbasic2 = false, Mbasic1 = false, Mbasic2 = false, Xbasic = false;
     bool Ch13 = false;
     Texture* block = new Texture[24];
     block[0].loadFromFile("1.png");
@@ -104,7 +113,6 @@ int main()
 
 
     Texture* blockhover = new Texture[24];
-    blockhover[0].loadFromFile("1h.png");
     blockhover[1].loadFromFile("2h.png");
     blockhover[2].loadFromFile("3h.png");
     blockhover[3].loadFromFile("4h.png");
@@ -128,6 +136,30 @@ int main()
     blockhover[21].loadFromFile("22h.png");
     blockhover[22].loadFromFile("23h.png");
     blockhover[23].loadFromFile("24h.png");
+
+    //주사위 시작
+    Texture defaultTexture;
+    Texture diceTextures[6];
+    if (!defaultTexture.loadFromFile("backdice.png")) {
+        return EXIT_FAILURE;
+    }
+    string filePath = "dice";
+    for (int i = 0; i < 6; i++) {
+        if (!diceTextures[i].loadFromFile(filePath + to_string(i + 1) + ".png")) {
+            cerr << "Failed to load dice" << i + 1 << " texture!" << endl;
+        }
+    }
+
+    // 주사위 스프라이트 생성 및 설정
+    Sprite diceSprite; // 주사위 사진이 나오게 하는 변수 
+    diceSprite.setScale(0.25f, 0.25f); //크기 
+    diceSprite.setPosition(580, 300);  //위치 
+
+    // 랜덤 시드 초기화
+    srand(static_cast<unsigned int>(time(NULL)));
+    bool dice = true;       //주사위가 다른 화면에서는 굴러가지 않도록 하는 변수입니당. 
+
+    //주사위 끝
 
     // nextbutton
     Texture next[4];
@@ -279,6 +311,59 @@ int main()
     XheartS.setPosition(1162, 550);
     char buffer4[4]; // "%3d"는 최대 3자리까지 표시하므로 4자리 배열이 필요함
 
+    // 엔딩
+    bool EndChHM =  false, EndChHJ = false, EndChMJ = false, EndChHMJ = false;
+    Texture EndBack;
+    int turn = 0;
+    bool HEnd = false, MEnd = false, JEnd = false;
+    bool End = false, EndCh = false, EndChSec = true;;
+    if ((turn == 2&& Number>=24)) {  // & 주사위누적값 >= 24 추가
+        if (Xheart >= 80) {
+            EndBack.loadFromFile("EndX.png");
+        }
+        else if (Jheart >= 80 && Hheart >= 80) {
+            EndBack.loadFromFile("EndBackCh.png");
+            chB13[0].setPosition(358, 218);
+            chB13[1].setPosition(673.57, 218);
+            EndChHJ = true, EndCh = true;
+        }
+        else if (Jheart >= 80 && Mheart >= 80) {
+            EndBack.loadFromFile("EndBackCh.png");
+            chB13[0].setPosition(358, 218);
+            chB13[2].setPosition(673.57, 218);
+            EndChMJ = true, EndCh = true;
+        }
+        else if (Mheart >= 80 && Hheart >= 80) {
+            EndBack.loadFromFile("EndBackCh.png");
+            chB13[1].setPosition(358, 218);
+            chB13[2].setPosition(673.57, 218);
+            EndChHM = true, EndCh = true;
+        }
+        else if (Mheart >= 80 && Hheart >= 80 && Jheart>=80) {
+            chB13[0].setPosition(516.57, 218);
+            chB13[1].setPosition(832.14, 218);
+            chB13[2].setPosition(201, 218);
+            EndChHMJ = true, EndCh = true;
+        }
+        else if (Jheart >= 80) {
+            JEnd = true;
+            EndBack.loadFromFile("EndJ.png");
+        }
+        else if (Mheart >= 80) {
+            EndBack.loadFromFile("EndM.png");
+            MEnd = true;
+        }
+        else if (Hheart >= 80) {
+            EndBack.loadFromFile("EndH.png");
+            HEnd = true;
+        }
+        Sprite EndBackS;
+        EndBackS.setTexture(EndBack);
+        EndBackS.setScale(0.25f, 0.25f);
+        
+    }
+
+
     while (app.isOpen())
     {
         Event event;
@@ -298,33 +383,74 @@ int main()
                 app.setPosition(newPosition);
             }
 
-            Vector2f mousePos = app.mapPixelToCoords(Mouse::getPosition(app));
-            for (int i = 0; i < 24; i++) {
-                if (button[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
-                    isButtonHovered = true;
-                }
-                else {
-                    isButtonHovered = false;
-                }
+            if (Screen1 && dice == true)
+                diceSprite.setTexture(defaultTexture);
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Space && Screen1 && dice == true) {
+                // 주사위 굴리기
+                int diceValue = rand() % 6;
+                Number += diceValue + 1;
+                if (Number > 24) Number -= 24;
+                std::cout << "주사위 값 " << diceValue + 1 << endl;        //주사위 나온 값입니당
+                std::cout << "주사위 누적 " << Number << std::endl;       //주사위 누적 값입니당
 
-                if (isButtonHovered) {
-                    button[i].setTexture(blockhover[i]);
-                }
-                else {
-                    button[i].setTexture(block[i]);
+                // 주사위 값에 따라 스프라이트 변경
+                diceSprite.setTexture(diceTextures[diceValue]);
+                ;
+                dice = false;  // 주사위 굴릴 수 있게 하는 변수입니당! 만약 다른 코드가 끝난 후 주사위가 굴러가지 않는다면  dice = true;를 추가하면 될거에욤..!
+            }
+            //주사위 끝
+
+            Vector2f mousePos = app.mapPixelToCoords(Mouse::getPosition(app));
+            for (int i = 1; i < 24; i++) {
+                if (Number - 1 == i) {
+                    if (button[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+                        isButtonHovered = true;
+                    }
+                    else {
+                        isButtonHovered = false;
+                    }
+
+                    if (isButtonHovered) {
+                        button[i].setTexture(blockhover[i]);
+                    }
+                    else {
+                        button[i].setTexture(block[i]);
+                    }
                 }
 
                 if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                     if (button[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
-                        if (i == 3 && Screen1) {
+                        if (i == 3 && Screen1 && Number == 4 ) {
+                            dice = true;
                             Screen1 = false;
                             Hch1 = true;
                         }
-                        else if (i == 8 && Screen1) {
+                        else if (i == 2 && Screen1 && Number == 3) {
+                            dice = true;
+                            Mbasic1 = true;
+                            Screen1 = false;
+                            Mheart += 15;
+                        }
+                        else if (i == 4 && Screen1 && Number == 5) {
+                            dice = true;
+                            Jbasic1 = true;
+                            Screen1 = false;
+                            Jheart += 15;
+                        }
+                        else if (i == 6 && Screen1 && Number == 7) {
+                            dice = true;
+                            Hbasic1 = true;
+                            Screen1 = false;
+                            Hheart += 15;
+                        }
+                        else if (i == 8 && Screen1 && Number == 9) {
+                            dice = true;
                             Screen1 = false;
                             Mch1 = true;
+                            Mheart += 15;
                         }
-                        else if (i == 11 && Screen1) {
+                        else if (i == 11 && Screen1 && Number == 12) {
+                            dice = true;
                             Screen1 = false;
                             Hch2 = true;
                             text1.setString(L"전 카라멜 팝콘 좋아해요");
@@ -332,7 +458,8 @@ int main()
                             text2.setString(L"전 민트초코 팝콘 좋아해요");
                             text2.setPosition(848, 452);
                         }
-                        else if (i == 14 && Screen1) {
+                        else if (i == 14 && Screen1 && Number == 15) {
+                            dice = true;
                             Screen1 = false;
                             Jch1 = true;
                             text1.setString(L"가는데 10분 정도 걸리니까\n지금 나가야겠네요");
@@ -340,7 +467,14 @@ int main()
                             text2.setString(L"에이 천천히 가도 괜찮아요");
                             text2.setPosition(848, 452);
                         }
-                        else if (i == 18 && Screen1) {
+                        else if (i == 17 && Screen1 && Number == 18) {
+                            dice = true;
+                            Hbasic2 = true;
+                            Screen1 = false;
+                            Hheart += 15;
+                        }
+                        else if (i == 18 && Screen1 && Number == 19) {
+                            dice = true;
                             Screen1 = false;
                             Mch2 = true;
                             text1.setString(L"(장난스럽게) 하하\n이래서 그만두셨구나");
@@ -348,7 +482,8 @@ int main()
                             text2.setString(L"그래도 잘하시네요\n역시 선수 출신!");
                             text2.setPosition(896, 433);
                         }
-                        else if (i == 20 && Screen1) {
+                        else if (i == 20 && Screen1 && Number == 21) {
+                            dice = true;
                             Jch2 = true;
                             Screen1 = false;
                             text1.setString(L"아뇨, 이제 씻어야죠");
@@ -356,30 +491,53 @@ int main()
                             text2.setString(L"에이 괜찮아요~\n어차피 장갑 낄 건데요");
                             text2.setPosition(875, 432);
                         }
-                        else if (i == 12 && Screen1) {
+                        else if (i == 12 && Screen1 && Number == 13) {
+                            dice = true;
                             Ch13 = true;
                         }
-                        else if (i == 7 && Screen1) {
+                        else if (i == 7 && Screen1 && Number == 8) {
+                            dice = true;
                             popup1 = true;
                             Hheart -= 10;
                             Jheart -= 10;
                             Mheart -= 10;
                         }
-                        else if (i == 15 && Screen1) {
+                        else if (i == 10 && Screen1 && Number == 11) {
+                            dice = true;
+                            Jbasic2 = true;
+                            Screen1 = false;
+                            Jheart += 15;
+                        }
+                        else if (i == 15 && Screen1 && Number == 16) {
+                            dice = true;
                             popup2 = true;
                             Hheart += 15;
                             Jheart += 15;
                             Mheart += 15;
                         }
-                        else if (i == 19 && Screen1) {
+                        else if (i == 19 && Screen1 && Number == 20) {
+                            dice = true;
                             popup3 = true;
                             Xheart += 20;
                         }
-                        else if (i == 23 && Screen1) {
+                        else if (i == 22 && Screen1 && Number == 23) {
+                            dice = true;
+                            Mbasic2 = true;
+                            Screen1 = false;
+                            Mheart += 15;
+                        }
+                        else if (i == 23 && Screen1 && Number == 24) {
+                            dice = true;
                             popup4 = true;
                             Hheart -= 15;
                             Jheart -= 15;
                             Mheart -= 15;
+                        }
+                        else if ((i == 13 || i == 1) && Screen1 && (Number == 2 || Number == 14)) {
+                            dice = true;
+                            Xbasic = true;
+                            Screen1 = false;
+                            Xheart += 15;
                         }
                     }
                 }
@@ -417,11 +575,16 @@ int main()
                             text2.setString(L"혹시 주문이\n잘못 들어갔나요?");
                             text2.setPosition(901, 433);
                         }
-                        else if (i == 2 && (HchB || HchG || Mch1G || Mch1B || Mch2G || Mch2B || JchB || JchG || Ch13)) {
+                        else if (i == 2 && (HchB || HchG || Mch1G || Mch1B || Mch2G || Mch2B || JchB || JchG || Ch13 ||Hbasic1||Hbasic2
+                            || Jbasic1||Jbasic2||Mbasic1||Mbasic2||Xbasic)) {
                             HchB = false, HchG = false;
                             Mch1G = false, Mch1B = false, Mch2G = false, Mch2B = false;
                             JchB = false, JchG = false;
                             Ch13 = false; chSBTEXT = false;
+                            Hbasic1 = false; Hbasic2 = false;
+                            Jbasic1 = false; Jbasic2 = false;
+                            Mbasic1 = false; Mbasic2 = false;
+                            Xbasic = false;
                             Screen1 = true;
                         }
                         else if (i == 0 && Screen1) {
@@ -429,6 +592,9 @@ int main()
                             popup2 = false;
                             popup3 = false;
                             popup4 = false;
+                        }
+                        else if (i == 2 && EndCh) {
+                            EndChSec = true;
                         }
                     }
                 }
@@ -584,6 +750,7 @@ int main()
                 app.draw(button[i]);
             }
             app.draw(button[20]);
+            app.draw(diceSprite);
             for (int i = 0; i < 3; i++) Ch13HMJ[i] = false;
             Ch13B = false;
             app.draw(JheartS);
@@ -621,52 +788,52 @@ int main()
             break;
             // click8~13
         case 8:
-            Click[1].setPosition(395, 582);
+            Click[1].setPosition(300, 582);
             app.draw(Click[1]);
             break;
         case 9:
-            Click[1].setPosition(344, 474);
+            Click[1].setPosition(349.2, 474);
             app.draw(Click[1]);
             break;
         case 10:
-            Click[1].setPosition(344, 368);
+            Click[1].setPosition(349.2, 368);
             app.draw(Click[1]);
             break;
         case 11:
-            Click[1].setPosition(344, 262);
+            Click[1].setPosition(349.2, 262);
             app.draw(Click[1]);
             break;
         case 12:
-            Click[1].setPosition(344, 156);
+            Click[1].setPosition(349.2, 156);
             app.draw(Click[1]);
             break;
         case 13:
-            Click[1].setPosition(395, 54);
+            Click[1].setPosition(300, 54);
             app.draw(Click[1]);
             break;
             // click14~19
         case 14:
-            Click[2].setPosition(867, 160);
+            Click[2].setPosition(337, 160);
             app.draw(Click[2]);
             break;
         case 15:
-            Click[2].setPosition(761, 160);
-            app.draw(Click[2]);
-            break;
-        case 16:
-            Click[2].setPosition(655, 160);
-            app.draw(Click[2]);
-            break;
-        case 17:
-            Click[2].setPosition(549, 160);
-            app.draw(Click[2]);
-            break;
-        case 18:
             Click[2].setPosition(443, 160);
             app.draw(Click[2]);
             break;
+        case 16:
+            Click[2].setPosition(549, 160);
+            app.draw(Click[2]);
+            break;
+        case 17:
+            Click[2].setPosition(655, 160);
+            app.draw(Click[2]);
+            break;
+        case 18:
+            Click[2].setPosition(761, 160);
+            app.draw(Click[2]);
+            break;
         case 19:
-            Click[2].setPosition(337, 160);
+            Click[2].setPosition(867, 160);
             app.draw(Click[2]);
             break;
             // click20~24
@@ -690,6 +857,32 @@ int main()
             Click[3].setPosition(834, 474);
             app.draw(Click[3]);
             break;
+        }
+
+
+        //Hbasic
+        if (Hbasic1) {
+            app.draw(background[18]);
+        }
+        if (Hbasic2) {
+            app.draw(background[19]);
+        }
+        //Jbasic
+        if (Jbasic1) {
+            app.draw(background[20]);
+        }
+        if (Jbasic2) {
+            app.draw(background[21]);
+        }
+        //Mbasic
+        if (Mbasic1) {
+            app.draw(background[22]);
+        }
+        if (Mbasic2) {
+            app.draw(background[23]);
+        }
+        if (Xbasic) {
+            app.draw(background[24]);
         }
 
         //Hch
@@ -762,14 +955,48 @@ int main()
         }
         if (Screen1) {
             if (Ch13HMJ[0]) {
-                // 한솔 호감도 상승
+                Hheart += 15;
             }
             else if (Ch13HMJ[1]) {
-                // 민재 호감도 상승
+                Mheart += 15;
             }
             else if (Ch13HMJ[2]) {
-                // 재현 호감도 상승
+                Jheart += 15;
             }
+        }
+        
+        // 엔딩
+        if (EndChHMJ) {
+            for (int i = 0; i < 3; i++)   app.draw(chB13[i]);
+        }
+        else if (EndChHM) {
+            // 해당 chB13버튼 draw
+        }
+        else if (EndChHJ) {
+            // 해당 chB13버튼 draw
+        }
+        else if (EndChMJ) {
+            // 해당 chB13버튼 draw
+        }
+        if (EndChSec) {
+            if (Ch13HMJ[0]) {
+                HEnd = true;
+            }
+            else if (Ch13HMJ[1]) {
+                MEnd = true;
+            }
+            else if (Ch13HMJ[2]) {
+                JEnd = true;
+            }
+        }
+        if (HEnd) {
+
+        }
+        else if (MEnd) {
+
+        }
+        else if (JEnd) {
+
         }
 
 
@@ -785,7 +1012,7 @@ int main()
             app.draw(chSB);
             chSBTEXT = true;
         }
-        if (Ch13 && Ch13B) {
+        if ((Ch13 && Ch13B)||(Hbasic1||Hbasic2)|| (Jbasic1 || Jbasic2) || (Mbasic1 || Mbasic2|| Xbasic)) {
             app.draw(nextbutton[2]);
         }
 
