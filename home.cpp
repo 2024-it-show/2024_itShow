@@ -42,8 +42,8 @@ int main()
     back[15].loadFromFile("JchG.png");
     back[16].loadFromFile("Jch2.png");
     back[17].loadFromFile("ch(13).png");
-    back[18].loadFromFile("Hbasic1.png");
-    back[19].loadFromFile("Hbasic2.png");
+    back[18].loadFromFile("Hbasic2.png");
+    back[19].loadFromFile("Hbasic1.png");
     back[20].loadFromFile("Jbasic1.png");
     back[21].loadFromFile("Jbasic2.png");
     back[22].loadFromFile("Mbasic1.png");
@@ -138,6 +138,7 @@ int main()
     blockhover[23].loadFromFile("24h.png");
 
     //주사위 시작
+    int turn = 1;
     Texture defaultTexture;
     Texture diceTextures[6];
     if (!defaultTexture.loadFromFile("backdice.png")) {
@@ -149,7 +150,10 @@ int main()
             cerr << "Failed to load dice" << i + 1 << " texture!" << endl;
         }
     }
-
+    if (Number >= 25&& turn==1) {
+        Number -= 24;
+        turn++;
+    }
     // 주사위 스프라이트 생성 및 설정
     Sprite diceSprite; // 주사위 사진이 나오게 하는 변수 
     diceSprite.setScale(0.25f, 0.25f); //크기 
@@ -265,6 +269,86 @@ int main()
     chB13hover[2].loadFromFile("ch13JBh.png");
     bool Ch13B = false, Ch13HMJ[3] = { false };
 
+
+    Texture s_back[3]; // 시작배경
+    s_back[0].loadFromFile("startB1.png");
+    s_back[1].loadFromFile("startB2.png");
+    s_back[2].loadFromFile("startB3.png");
+
+    Sprite s_background[3];
+    for (int i = 0; i < 3; i++) {
+        s_background[i].setTexture(s_back[i]);
+        s_background[i].setScale(0.25f, 0.25f);
+    }
+
+    bool sB1 = true; bool sB2 = false; bool sB3 = false;
+
+    Texture s_button[3]; // 시작버튼
+    s_button[0].loadFromFile("start1.png");
+    s_button[1].loadFromFile("button1.png");
+
+    Sprite s_nextbutton[2];
+    for (int i = 0; i < 2; i++) {
+        s_nextbutton[i].setTexture(s_button[i]);
+        s_nextbutton[i].setScale(0.25f, 0.25f);
+    }
+    s_nextbutton[0].setPosition(535, 500);
+    s_nextbutton[1].setPosition(950, 560);
+
+    Texture s_buttonH[3]; // 시작버튼 호버
+    s_buttonH[0].loadFromFile("start2.png");
+    s_buttonH[1].loadFromFile("button2.png");
+
+    // 랜덤
+    Texture r_back[4];
+    r_back[0].loadFromFile("Random1.png");
+    r_back[1].loadFromFile("Random2.png");
+    r_back[2].loadFromFile("Random3.png");
+    r_back[3].loadFromFile("Random4.png");
+    Sprite r_background[4];
+    for (int i = 0; i < 4; i++) {
+        r_background[i].setTexture(r_back[i]);
+        r_background[i].setScale(0.25f, 0.25f);
+    }
+
+    Texture r_back_1[3]; // 랜덤 인물 선택
+    r_back_1[0].loadFromFile("Random_UP_MJ.png");
+    r_back_1[1].loadFromFile("Random_Up_JH.png");
+    r_back_1[2].loadFromFile("Random_Up_HS.png");
+    Sprite r_background_1[3];
+    for (int i = 0; i < 3; i++) {
+        r_background_1[i].setTexture(r_back_1[i]);
+        r_background_1[i].setScale(0.25f, 0.25f);
+    }
+
+    Texture r_back_2[3]; // 랜덤 인물 선택
+    r_back_2[0].loadFromFile("Random_Down_MJ.png");
+    r_back_2[1].loadFromFile("Random_Down_JH.png");
+    r_back_2[2].loadFromFile("Random_Down_HS.png");
+    Sprite r_background_2[3];
+    for (int i = 0; i < 3; i++) {
+        r_background_2[i].setTexture(r_back_2[i]);
+        r_background_2[i].setScale(0.25f, 0.25f);
+    }
+
+    bool rB1 = false;
+    bool rB2 = false;
+    bool rB3 = false;
+    bool rB4 = false;
+
+    bool rB_1 = false;
+    bool rB_1_1 = false;
+    bool rB_1_2 = false;
+    bool rB_1_3 = false;
+
+    bool rB_2 = false;
+    bool rB_2_1 = false;
+    bool rB_2_2 = false;
+    bool rB_2_3 = false;
+
+    // 여까지 추가됨
+
+
     // Click // 지수민소리 여기서 setPosition만 해주면 되는데 칸마다 다르게 해줘야 해
     // 그니까 Number 두고 switch나 if로 2부터 24까지(for문X) 조건 줘서 피그마 보고 x,y 따와서 세팅하면 돼용 
     Texture click[4];
@@ -314,10 +398,9 @@ int main()
     // 엔딩
     bool EndChHM =  false, EndChHJ = false, EndChMJ = false, EndChHMJ = false;
     Texture EndBack;
-    int turn = 0;
     bool HEnd = false, MEnd = false, JEnd = false;
     bool End = false, EndCh = false, EndChSec = true;;
-    if ((turn == 2&& Number>=24)) {  // & 주사위누적값 >= 24 추가
+    if ((turn == 2 && Number>=24)) {  // & 주사위누적값 >= 24 추가
         if (Xheart >= 80) {
             EndBack.loadFromFile("EndX.png");
         }
@@ -379,7 +462,7 @@ int main()
                 unsigned int newWidth = static_cast<unsigned int>(newHeight * aspectRatio);
                 app.setSize(sf::Vector2u(newWidth, newHeight));
                 sf::Vector2u windowSize = app.getSize();
-                sf::Vector2i newPosition((static_cast<int>(sf::VideoMode::getDesktopMode().width) - static_cast<int>(windowSize.x)) / 2,0); // 화면의 상단 좌표를 사용하여 Y 좌표를 0으로 설정
+                sf::Vector2i newPosition((static_cast<int>(sf::VideoMode::getDesktopMode().width) - static_cast<int>(windowSize.x)) / 2, 0); // 화면의 상단 좌표를 사용하여 Y 좌표를 0으로 설정
                 app.setPosition(newPosition);
             }
 
@@ -398,9 +481,38 @@ int main()
                 ;
                 dice = false;  // 주사위 굴릴 수 있게 하는 변수입니당! 만약 다른 코드가 끝난 후 주사위가 굴러가지 않는다면  dice = true;를 추가하면 될거에욤..!
             }
-            //주사위 끝
 
             Vector2f mousePos = app.mapPixelToCoords(Mouse::getPosition(app));
+            //주사위 끝
+            for (int i = 0; i < 2; i++) {
+                if (s_nextbutton[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+                    isButtonHovered = true;
+                }
+                else {
+                    isButtonHovered = false;
+                }
+
+                if (isButtonHovered) {
+                    s_nextbutton[i].setTexture(s_buttonH[i]);
+                }
+                else {
+                    s_nextbutton[i].setTexture(s_button[i]);
+                }
+
+                if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+                    if (s_nextbutton[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+                        if (i == 0 && sB1) {
+                            sB1 = false;
+                            sB2 = true;
+                        }
+                        else if (i == 1 && sB2) {
+                            sB2 = false;
+                            sB3 = true;
+                        }
+                    }
+                }
+            }
+
             for (int i = 1; i < 24; i++) {
                 if (Number - 1 == i) {
                     if (button[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
@@ -420,7 +532,7 @@ int main()
 
                 if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                     if (button[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
-                        if (i == 3 && Screen1 && Number == 4 ) {
+                        if (i == 3 && Screen1 && Number == 4) {
                             dice = true;
                             Screen1 = false;
                             Hch1 = true;
@@ -429,7 +541,7 @@ int main()
                             dice = true;
                             Mbasic1 = true;
                             Screen1 = false;
-                            Mheart += 15;
+                            Mheart -= 15;
                         }
                         else if (i == 4 && Screen1 && Number == 5) {
                             dice = true;
@@ -441,7 +553,7 @@ int main()
                             dice = true;
                             Hbasic1 = true;
                             Screen1 = false;
-                            Hheart += 15;
+                            Hheart -= 15;
                         }
                         else if (i == 8 && Screen1 && Number == 9) {
                             dice = true;
@@ -506,7 +618,7 @@ int main()
                             dice = true;
                             Jbasic2 = true;
                             Screen1 = false;
-                            Jheart += 15;
+                            Jheart -= 15;
                         }
                         else if (i == 15 && Screen1 && Number == 16) {
                             dice = true;
@@ -539,6 +651,32 @@ int main()
                             Screen1 = false;
                             Xheart += 15;
                         }
+                        else if ((i == 5 || i == 9 || i == 16 || i == 21) && Screen1 && (Number == 6 || Number == 10 || Number == 17 || Number == 22)) {
+                            dice = true;
+                            int random = (int)(rand() % 4) + 1; // 1~4
+                            if (random == 1) {
+                                rB1 = true;
+                                Hheart += 15;
+                                Jheart += 15;
+                                Mheart += 15;
+                                Xheart += 15;
+                            }
+                            else if (random == 2) {
+                                rB2 = true;
+                                rB_1 = true;
+                            }
+                            else if (random == 3) {
+                                rB3 = true;
+                                rB_2 = true;
+                            }
+                            else if (random == 4) {
+                                rB4 = true;
+                                Xheart += 10;
+                            }
+                            Screen1 = false;
+                        }
+                        else if (Number == 1) dice = true;
+
                     }
                 }
             }
@@ -575,17 +713,53 @@ int main()
                             text2.setString(L"혹시 주문이\n잘못 들어갔나요?");
                             text2.setPosition(901, 433);
                         }
-                        else if (i == 2 && (HchB || HchG || Mch1G || Mch1B || Mch2G || Mch2B || JchB || JchG || Ch13 ||Hbasic1||Hbasic2
-                            || Jbasic1||Jbasic2||Mbasic1||Mbasic2||Xbasic)) {
+                        else if (i == 2 && (HchB || HchG || Mch1G || Mch1B || Mch2G || Mch2B || JchB || JchG || Ch13 || Hbasic1 || Hbasic2
+                            || Jbasic1 || Jbasic2 || Mbasic1 || Mbasic2 || Xbasic || sB3 || rB1 || rB2 || rB3 || rB4
+                            || rB_1_1 || rB_1_2 || rB_1_3 || rB_2_1 || rB_2_2 || rB_2_3)) {
                             HchB = false, HchG = false;
                             Mch1G = false, Mch1B = false, Mch2G = false, Mch2B = false;
                             JchB = false, JchG = false;
+                            if (Ch13) {
+                                if (Ch13HMJ[0]) {
+                                    Hheart += 15;
+                                }
+                                else if (Ch13HMJ[1]) {
+                                    Mheart += 15;
+                                }
+                                else if (Ch13HMJ[2]) {
+                                    Jheart += 15;
+                                }
+                            }
+                            for (int j = 0; j < 3; j++) Ch13HMJ[j] = false;
                             Ch13 = false; chSBTEXT = false;
                             Hbasic1 = false; Hbasic2 = false;
                             Jbasic1 = false; Jbasic2 = false;
                             Mbasic1 = false; Mbasic2 = false;
                             Xbasic = false;
+                            rB1 = false; rB4 = false;
+                            sB3 = false;
+                            rB_1_1 = false; rB_1_2 = false; rB_1_3 = false; rB_2_1 = false; rB_2_2 = false; rB_2_3 = false;
                             Screen1 = true;
+
+                            if (rB2) {
+                                int random1 = (int)(rand() % 3) + 1; // 1~3
+                                rB2 = false;
+                                if (random1 == 1) { Mheart -= 10; rB_1_1 = true; }
+                                else if (random1 == 2) { rB_1_2 = true; Jheart -= 10; }
+                                else if (random1 == 3) { rB_1_3 = true; Hheart = 10; }
+                                rB_1 = false;
+                            }
+                            else if (rB3) {
+                                int random2 = (int)(rand() % 3) + 1; // 1~3
+                                rB3 = false;
+                                if (random2 == 1) {
+                                    rB_2_1 = true; Mheart += 10;
+                                }
+                                else if (random2 == 2) { rB_2_2 = true; Jheart += 10; }
+                                else if (random2 == 3) { rB_2_3 = true; Hheart += 10; }
+                                rB_2 = false;
+                            }
+
                         }
                         else if (i == 0 && Screen1) {
                             popup1 = false;
@@ -713,35 +887,35 @@ int main()
                     }
                 }
             }
-                for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
 
-                    if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
-                        if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
-                            Ch13B = true;
-                            for (int j = 0; j < 3; j++) {
-                                if (i == j) {
-                                    chB13[j].setTexture(chB13hover[j]);
-                                    Ch13HMJ[j] = true;
-                                }
-                                else {
-                                    chB13[j].setTexture(choice13[j]);
-                                    Ch13HMJ[j] = false;
-                                }
+                if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+                    if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+                        Ch13B = true;
+                        for (int j = 0; j < 3; j++) {
+                            if (i == j) {
+                                chB13[j].setTexture(chB13hover[j]);
+                                Ch13HMJ[j] = true;
+                            }
+                            else {
+                                chB13[j].setTexture(choice13[j]);
+                                Ch13HMJ[j] = false;
                             }
                         }
-                        if(!Ch13B) chB13[i].setTexture(choice13[i]);
                     }
+                    if (!Ch13B) chB13[i].setTexture(choice13[i]);
                 }
             }
+        }
 
-            std::snprintf(buffer1, sizeof(buffer1), "%3d", Jheart);
-            JheartS.setString(buffer1);
-            std::snprintf(buffer2, sizeof(buffer2), "%3d", Hheart);
-            HheartS.setString(buffer2);
-            std::snprintf(buffer3, sizeof(buffer3), "%3d", Mheart);
-            MheartS.setString(buffer3);
-            std::snprintf(buffer4, sizeof(buffer4), "%3d", Xheart);
-            XheartS.setString(buffer4);
+        std::snprintf(buffer1, sizeof(buffer1), "%3d", Jheart);
+        JheartS.setString(buffer1);
+        std::snprintf(buffer2, sizeof(buffer2), "%3d", Hheart);
+        HheartS.setString(buffer2);
+        std::snprintf(buffer3, sizeof(buffer3), "%3d", Mheart);
+        MheartS.setString(buffer3);
+        std::snprintf(buffer4, sizeof(buffer4), "%3d", Xheart);
+        XheartS.setString(buffer4);
 
         if (Screen1) {
             app.draw(background[0]);
@@ -751,8 +925,6 @@ int main()
             }
             app.draw(button[20]);
             app.draw(diceSprite);
-            for (int i = 0; i < 3; i++) Ch13HMJ[i] = false;
-            Ch13B = false;
             app.draw(JheartS);
             app.draw(HheartS);
             app.draw(MheartS);
@@ -858,6 +1030,32 @@ int main()
             app.draw(Click[3]);
             break;
         }
+        // 추가됨
+//sB
+        if (sB1) {
+            app.draw(s_background[0]);
+            app.draw(s_nextbutton[0]);
+        }
+        else if (sB2) {
+            app.draw(s_background[1]);
+            app.draw(s_nextbutton[1]);
+        }
+        else if (sB3) {
+            app.draw(s_background[2]);
+        }
+
+        // 추가됨
+        //rB
+        if (rB1) app.draw(r_background[0]);
+        else if (rB2) app.draw(r_background[1]);
+        else if (rB3) app.draw(r_background[2]);
+        else if (rB4) app.draw(r_background[3]);
+        else if (rB_1_1) app.draw(r_background_2[0]);
+        else if (rB_1_2) app.draw(r_background_2[1]);
+        else if (rB_1_3) app.draw(r_background_2[2]);
+        else if (rB_2_1) app.draw(r_background_1[0]);
+        else if (rB_2_2) app.draw(r_background_1[1]);
+        else if (rB_2_3) app.draw(r_background_1[2]);
 
 
         //Hbasic
@@ -953,17 +1151,6 @@ int main()
             app.draw(background[17]);
             for (int i = 0; i <3; i++)   app.draw(chB13[i]);
         }
-        if (Screen1) {
-            if (Ch13HMJ[0]) {
-                Hheart += 15;
-            }
-            else if (Ch13HMJ[1]) {
-                Mheart += 15;
-            }
-            else if (Ch13HMJ[2]) {
-                Jheart += 15;
-            }
-        }
         
         // 엔딩
         if (EndChHMJ) {
@@ -1012,7 +1199,8 @@ int main()
             app.draw(chSB);
             chSBTEXT = true;
         }
-        if ((Ch13 && Ch13B)||(Hbasic1||Hbasic2)|| (Jbasic1 || Jbasic2) || (Mbasic1 || Mbasic2|| Xbasic)) {
+        if ((Ch13 && Ch13B)||(Hbasic1||Hbasic2)|| (Jbasic1 || Jbasic2) || (Mbasic1 || Mbasic2|| Xbasic)
+            || rB1 || rB2 || rB3 || rB4 || sB3 || rB_1_1 || rB_1_2 || rB_1_3 || rB_2_1 || rB_2_2 || rB_2_3) {
             app.draw(nextbutton[2]);
         }
 
