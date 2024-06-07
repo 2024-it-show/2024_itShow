@@ -147,7 +147,7 @@ int main()
 	blockhover[23].loadFromFile("24h.png");
 
 	//주사위 시작
-	int count = 10;
+	int count = 0;
 	Texture diceTextures[6];
 	string filePath = "dice";
 	for (int i = 0; i < 6; i++) {
