@@ -147,7 +147,7 @@ int main()
 	blockhover[23].loadFromFile("24h.png");
 
 	//주사위 시작
-	int count = 10;
+	int count = 0;
 	Texture diceTextures[6];
 	string filePath = "dice";
 	for (int i = 0; i < 6; i++) {
@@ -1053,8 +1053,8 @@ int main()
 
 		//엔딩
 		// 
-		if (((Jheart >= 80 && Hheart >= 80) || (Jheart >= 80 && Mheart >= 80) || (Mheart >= 80 && Hheart >= 80)
-			|| (Mheart >= 80 && Hheart >= 80 && Jheart >= 80)) &&EndLetter&&!EndChSec) {
+		if (((Jheart >= 70 && Hheart >= 70) || (Jheart >= 70 && Mheart >= 70) || (Mheart >= 70 && Hheart >= 70)
+			|| (Mheart >= 70 && Hheart >= 70 && Jheart >= 70)) &&EndLetter&&!EndChSec) {
 			app.draw(EndBackS);
 			Endch = true;
 		}
@@ -1093,25 +1093,25 @@ int main()
 
 		if (Endch) {
 			app.draw(nextbutton[2]);
-			if (Mheart >= 80 && Hheart >= 80 && Jheart >= 80) {
+			if (Mheart >= 70 && Hheart >= 70 && Jheart >= 70) {
 				chB13[0].setPosition(516.57, 218);
 				chB13[1].setPosition(832.14, 218);
 				chB13[2].setPosition(201, 218);
 				for (int i = 0; i < 3; i++)   app.draw(chB13[i]);
 			}
-			else if (Jheart >= 80 && Mheart >= 80) {
+			else if (Jheart >= 70 && Mheart >= 70) {
 				chB13[2].setPosition(358, 218);
 				chB13[1].setPosition(673.57, 218);
 				app.draw(chB13[1]);
 				app.draw(chB13[2]);
 			}
-			else if (Mheart >= 80 && Hheart >= 80) {
+			else if (Mheart >= 70 && Hheart >= 70) {
 				chB13[0].setPosition(358, 218);
 				chB13[1].setPosition(673.57, 218);
 				app.draw(chB13[0]);
 				app.draw(chB13[1]);
 			}
-			else if (Jheart >= 80 && Hheart >= 80) {
+			else if (Jheart >= 70 && Hheart >= 70) {
 				chB13[0].setPosition(358, 218);
 				chB13[1].setPosition(673.57, 218);
 				app.draw(chB13[0]);
@@ -1119,16 +1119,16 @@ int main()
 			}
 		}
 
-		if (((Jheart >= 80 && Mheart < 80 && Hheart < 80 && EndLetter) || (Jheart >= 80 && Ch13HMJ[2] && EndChSec)) && count == 13) {
+		if (((Jheart >= 70 && Mheart < 70 && Hheart < 70 && EndLetter) || (Jheart >= 70 && Ch13HMJ[2] && EndChSec)) && count == 13) {
 			app.draw(EndBackSArr[0]);
 		}
-		else if (((Mheart >= 80 && Jheart < 80 && Hheart < 80 && EndLetter) || (Mheart >= 80 && Ch13HMJ[1] && EndChSec)) && count == 13) {
+		else if (((Mheart >= 70 && Jheart < 70 && Hheart < 70 && EndLetter) || (Mheart >= 70 && Ch13HMJ[1] && EndChSec)) && count == 13) {
 			app.draw(EndBackSArr[1]);
 		}
-		else if (((Hheart >= 80 && Mheart < 80 && Jheart < 80 && EndLetter) || (Hheart >= 80 && Ch13HMJ[0] && EndChSec)) && count == 13) {
+		else if (((Hheart >= 70 && Mheart < 70 && Jheart < 70 && EndLetter) || (Hheart >= 70 && Ch13HMJ[0] && EndChSec)) && count == 13) {
 			app.draw(EndBackSArr[2]);
 		}
-		else if (((Hheart < 80 && Mheart < 80 && Jheart < 80) || Xheart >= 80) && count == 13 && EndLetter) {
+		else if (((Hheart < 70 && Mheart < 70 && Jheart < 70) || Xheart >= 70) && count == 13 && EndLetter) {
 			app.draw(EndBackSArr[3]);
 		}
 		// 엔딩 끝
