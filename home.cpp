@@ -1,6 +1,8 @@
 ﻿#include <SFML/Graphics.hpp> 
 #include <iostream>
+#include <SFML/Window.hpp>
 #include <SFML/System.hpp>
+#include <cmath>
 #include <vector>
 #include <string>
 
@@ -145,7 +147,7 @@ int main()
 	blockhover[23].loadFromFile("24h.png");
 
 	//주사위 시작
-	int count = 0;
+	int count = 10;
 	Texture diceTextures[6];
 	string filePath = "dice";
 	for (int i = 0; i < 6; i++) {
@@ -440,9 +442,16 @@ int main()
 	EndLT.loadFromFile("EndLetter.png");
 	Sprite EndL;
 	EndL.setTexture(EndLT);
+	const float initialX = 400.0f;
+	const float initialY = 300.0f;
+	const float finalX = 633.0f;
+	const float finalY = 330.0f;
+	EndL.setPosition(initialX, initialY);
 	EndL.setScale(0.25f, 0.25f);
-	EndL.setPosition(633, 330); 
-
+	EndL.setOrigin(EndL.getGlobalBounds().width / 2, EndL.getGlobalBounds().height / 2);
+	sf::Clock clock2; // 애니메이션 시간 관리를 위한 시계
+	bool animationStarted = false; // 애니메이션 시작 여부를 나타내는 변수
+	bool animationEnded = false;
 
 	Texture EndLH;
 	EndLH.loadFromFile("EndLetterH.png");
@@ -995,7 +1004,7 @@ int main()
 		if (Number == 1 && count != 0) Number += 1;
 
 		//주사위 시작 
-		if (rolling) {
+		if (rolling&&count!=13) {
 			elapsedTime = clock.getElapsedTime();
 			timeAccumulator += elapsedTime.asSeconds();
 			if (timeAccumulator >= updateTime) {
@@ -1067,6 +1076,28 @@ int main()
 			end = true;
 			dice = false;
 		}
+
+		if (end && !animationStarted)
+		{
+			clock2.restart(); // 애니메이션 시간을 다시 시작
+			animationStarted = true; // 애니메이션 시작
+		}
+
+		if (animationStarted && !animationEnded)
+		{
+			float time = clock2.getElapsedTime().asSeconds(); // 경과 시간 가져오기
+			if (time <= 15.0f) // 애니메이션이 5초 동안 지속됨
+			{
+				float bounce = std::sin(time * 10) * 10; // 반동 효과 적용 (주기와 진폭 조정 가능)
+				EndL.setPosition(finalX, finalY + bounce); // 스프라이트의 위치를 반동에 맞게 설정
+			}
+			else
+			{
+				EndL.setPosition(finalX, finalY); // 애니메이션이 끝난 후 스프라이트 위치 고정
+				animationEnded = true; // 애니메이션 종료 표시
+			}
+		}
+
 		if (end) {
 			app.draw(EndL);
 		}
