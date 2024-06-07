@@ -147,7 +147,7 @@ int main()
 	blockhover[23].loadFromFile("24h.png");
 
 	//주사위 시작
-	int count = 0;
+	int count = 10;
 	Texture diceTextures[6];
 	string filePath = "dice";
 	for (int i = 0; i < 6; i++) {
@@ -1058,18 +1058,6 @@ int main()
 			app.draw(EndBackS);
 			Endch = true;
 		}
-		if (((Jheart >= 80 && Mheart < 80 && Hheart < 80&& EndLetter) || (Jheart >= 80 && Ch13HMJ[2] && EndChSec)) && count == 13) {
-			app.draw(EndBackSArr[0]);
-		}
-		else if (((Mheart >= 80 && Jheart < 80 && Hheart < 80 && EndLetter) || (Mheart >= 80 && Ch13HMJ[1] && EndChSec)) && count == 13) {
-			app.draw(EndBackSArr[1]);
-		}
-		else if (((Hheart >= 80 && Mheart < 80 && Jheart < 80 && EndLetter) || (Hheart >= 80 && Ch13HMJ[0] && EndChSec)) && count == 13) {
-			app.draw(EndBackSArr[2]);
-		}
-		else if (((Hheart < 80 && Mheart < 80 && Jheart < 80 ) || Xheart >= 80)&&count==13&& EndLetter) {
-			app.draw(EndBackSArr[3]);
-		}
 
 		
 		if (count == 13&&Screen1) {
@@ -1100,15 +1088,16 @@ int main()
 
 		if (end) {
 			app.draw(EndL);
+			for (int i = 0; i < 3; i++) chB13[i].setTexture(choice13[i]);
 		}
 
 		if (Endch) {
 			app.draw(nextbutton[2]);
-			if (Jheart >= 80 && Hheart >= 80) {
-				chB13[0].setPosition(358, 218);
-				chB13[1].setPosition(673.57, 218);
-				app.draw(chB13[0]);
-				app.draw(chB13[1]);
+			if (Mheart >= 80 && Hheart >= 80 && Jheart >= 80) {
+				chB13[0].setPosition(516.57, 218);
+				chB13[1].setPosition(832.14, 218);
+				chB13[2].setPosition(201, 218);
+				for (int i = 0; i < 3; i++)   app.draw(chB13[i]);
 			}
 			else if (Jheart >= 80 && Mheart >= 80) {
 				chB13[2].setPosition(358, 218);
@@ -1122,12 +1111,25 @@ int main()
 				app.draw(chB13[0]);
 				app.draw(chB13[1]);
 			}
-			else if (Mheart >= 80 && Hheart >= 80 && Jheart >= 80) {
-				chB13[0].setPosition(516.57, 218);
-				chB13[1].setPosition(832.14, 218);
-				chB13[2].setPosition(201, 218);
-				for (int i = 0; i < 3; i++)   app.draw(chB13[i]);
+			else if (Jheart >= 80 && Hheart >= 80) {
+				chB13[0].setPosition(358, 218);
+				chB13[1].setPosition(673.57, 218);
+				app.draw(chB13[0]);
+				app.draw(chB13[1]);
 			}
+		}
+
+		if (((Jheart >= 80 && Mheart < 80 && Hheart < 80 && EndLetter) || (Jheart >= 80 && Ch13HMJ[2] && EndChSec)) && count == 13) {
+			app.draw(EndBackSArr[0]);
+		}
+		else if (((Mheart >= 80 && Jheart < 80 && Hheart < 80 && EndLetter) || (Mheart >= 80 && Ch13HMJ[1] && EndChSec)) && count == 13) {
+			app.draw(EndBackSArr[1]);
+		}
+		else if (((Hheart >= 80 && Mheart < 80 && Jheart < 80 && EndLetter) || (Hheart >= 80 && Ch13HMJ[0] && EndChSec)) && count == 13) {
+			app.draw(EndBackSArr[2]);
+		}
+		else if (((Hheart < 80 && Mheart < 80 && Jheart < 80) || Xheart >= 80) && count == 13 && EndLetter) {
+			app.draw(EndBackSArr[3]);
 		}
 		// 엔딩 끝
 
