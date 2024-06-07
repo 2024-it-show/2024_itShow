@@ -9,7 +9,7 @@
 using namespace std;
 using namespace sf;
 
-int Number = 1; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+int Number = 8; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
 int Jheart = 40;
 int Hheart = 40;
 int Mheart = 40;
@@ -570,14 +570,12 @@ int main()
 				if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
 					if (button[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
 						if (i == 3 && Screen1 && Number == 4 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Screen1 = false;
 							Hch1 = true;
 							diceCount = count + 1;
 						}
 						else if (i == 2 && Screen1 && Number == 3 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Mbasic1 = true;
 							Screen1 = false;
@@ -585,7 +583,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 4 && Screen1 && Number == 5 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Jbasic1 = true;
 							Screen1 = false;
@@ -593,7 +590,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 6 && Screen1 && Number == 7 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Hbasic1 = true;
 							Screen1 = false;
@@ -601,7 +597,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 8 && Screen1 && Number == 9 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Screen1 = false;
 							Mch1 = true;
@@ -609,7 +604,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 11 && Screen1 && Number == 12 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Screen1 = false;
 							Hch2 = true;
@@ -620,7 +614,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 14 && Screen1 && Number == 15 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Screen1 = false;
 							Jch1 = true;
@@ -631,7 +624,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 17 && Screen1 && Number == 18 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Hbasic2 = true;
 							Screen1 = false;
@@ -639,7 +631,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 18 && Screen1 && Number == 19 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Screen1 = false;
 							Mch2 = true;
@@ -650,7 +641,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 20 && Screen1 && Number == 21 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Jch2 = true;
 							Screen1 = false;
@@ -661,13 +651,12 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 12 && Screen1 && Number == 13 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Ch13 = true;
 							diceCount = count + 1;
 						}
 						else if (i == 7 && Screen1 && Number == 8 && (diceCount != count + 1)) {
-							dice = true;
+							dice = false;
 							showImage1 = true;
 							popup1 = true;
 							Hheart -= 10;
@@ -676,7 +665,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 10 && Screen1 && Number == 11 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Jbasic2 = true;
 							Screen1 = false;
@@ -684,7 +672,7 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 15 && Screen1 && Number == 16 && (diceCount != count + 1)) {
-							dice = true;
+							dice = false;
 							showImage1 = true;
 							popup2 = true;
 							Hheart += 15;
@@ -693,14 +681,13 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 19 && Screen1 && Number == 20 && (diceCount != count + 1)) {
-							dice = true;
+							dice = false;
 							showImage1 = true;
 							popup3 = true;
 							Xheart += 20;
 							diceCount = count + 1;
 						}
 						else if (i == 22 && Screen1 && Number == 23 && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Mbasic2 = true;
 							Screen1 = false;
@@ -708,7 +695,7 @@ int main()
 							diceCount = count + 1;
 						}
 						else if (i == 23 && Screen1 && Number == 24 && (diceCount != count + 1)) {
-							dice = true;
+							dice = false;
 							showImage1 = true;
 							popup4 = true;
 							Hheart -= 15;
@@ -717,7 +704,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if ((i == 13 || i == 1) && Screen1 && (Number == 2 || Number == 14) && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							Xbasic = true;
 							Screen1 = false;
@@ -725,7 +711,6 @@ int main()
 							diceCount = count + 1;
 						}
 						else if ((i == 5 || i == 9 || i == 16 || i == 21) && Screen1 && (Number == 6 || Number == 10 || Number == 17 || Number == 22) && (diceCount != count + 1)) {
-							dice = true;
 							showImage1 = true;
 							diceCount = count + 1;
 							int random = (int)(rand() % 4) + 1; // 1~4
@@ -835,7 +820,6 @@ int main()
 								else if (random2 == 3) { rB_2_3 = true; Hheart += 10; }
 								rB_2 = false;
 							}
-
 						}
 						else if (i == 0 && Screen1) {
 							popup1 = false;
@@ -1397,6 +1381,8 @@ int main()
 		if (chSBTEXT) {
 			app.draw(chSBText);
 		}
+
+		if (!popup1 && !popup2 && !popup3 && !popup4 && count != 13&&Screen1) dice = true;
 		app.display();
 	}
 
