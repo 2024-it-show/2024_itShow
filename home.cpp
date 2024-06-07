@@ -962,7 +962,7 @@ int main()
 			}
 			for (int i = 0; i < 3; i++) {
 				if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
-					if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+					if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))&& !EndChSec) {
 						Ch13B = true;
 						for (int j = 0; j < 3; j++) {
 							if (i == j) {
