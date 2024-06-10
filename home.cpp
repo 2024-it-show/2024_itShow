@@ -1025,7 +1025,7 @@ int main()
                                 rB2 = false;
                                 if (random1 == 1) { Mheart -= 10; rB_1_1 = true; }
                                 else if (random1 == 2) { rB_1_2 = true; Jheart -= 10; }
-                                else if (random1 == 3) { rB_1_3 = true; Hheart = 10; }
+                                else if (random1 == 3) { rB_1_3 = true; Hheart -= 10; }
                                 rB_1 = false;
                             }
                             else if (rB3) {
