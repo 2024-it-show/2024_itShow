@@ -70,15 +70,15 @@ size_t currentImageIndexX;
 const unsigned int originalWidth = 1280;
 const unsigned int originalHeight = 720;
 
-RenderWindow app(VideoMode(originalWidth, originalHeight), "game");
+RenderWindow app(VideoMode(originalWidth, originalHeight), "EXchange Game");
 
 
 void resetGame() {
     Number = 1; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
     Jheart = 40;
     Hheart = 40;
-    Mheart = 40;
-    Xheart = 0;
+    Mheart = 90;
+    Xheart = 90;
     diceCount = 0;
     Screen1 = true;
     Hch1 = false, Hch1_2 = false, HchB = false, HchG = false, Hch2 = false;
@@ -1479,7 +1479,7 @@ int main()
             app.draw(realEnd);
             realEndBool = true;
         }
-        else if (((Hheart < 70 && Mheart < 70 && Jheart < 70) || Xheart >= 70) && Count == 13 && end_chatSec) {
+        else if ((((Hheart < 70 && Mheart < 70 && Jheart < 70) )|| Xheart >= 70) && Count == 13 && end_chatSec) {
             app.draw(EndBackSArr[3]);
             app.draw(realEnd);
             realEndBool = true;
