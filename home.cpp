@@ -52,6 +52,19 @@ bool animationStarted;
 bool animationEnded;
 bool realEndBool;
 
+Clock clock1;
+Clock clock2;
+Clock clock0;
+Clock clockM;
+Clock clockJ;
+Clock clockH;
+Clock clockX;
+
+
+size_t currentImageIndexM;
+size_t currentImageIndexJ;
+size_t currentImageIndexH;
+size_t currentImageIndexX;
 
 
 const unsigned int originalWidth = 1280;
@@ -106,6 +119,20 @@ void resetGame() {
     Ch13HMJ[0] = false;
     Ch13HMJ[1] = false;
     Ch13HMJ[2] = false;
+
+     clock1.restart();
+     clock0.restart();
+     clock2.restart();
+     clockM.restart();
+     clockJ.restart();
+     clockH.restart();
+     clockX.restart();
+
+
+      currentImageIndexM = 0;
+      currentImageIndexJ = 0;
+      currentImageIndexH = 0;
+      currentImageIndexX = 0;
 }
 
 int main()
@@ -266,13 +293,12 @@ int main()
 
     srand(static_cast<unsigned>(std::time(nullptr)));
 
-    Clock clock;
+
 
     float timeAccumulator = 0.0f;
     const float updateTime = 0.2f;
     const float totalRollingTime = 0.5f;
     Time elapsedTime;
-    Clock clock1;
     Time delayTime = sf::seconds(0.5f);
 
 
@@ -371,9 +397,6 @@ int main()
         chB13[i].setTexture(choice13[i]);
         chB13[i].setScale(0.25f, 0.25f);
     }
-    chB13[0].setPosition(516.57, 218);
-    chB13[1].setPosition(832.14, 218);
-    chB13[2].setPosition(201, 218);
     Texture chB13hover[3];
     chB13hover[0].loadFromFile("ch13HBh.png");
     chB13hover[1].loadFromFile("ch13MBh.png");
@@ -526,9 +549,7 @@ int main()
     }
 
     // 타이밍을 위한 시계
-    Clock clockM;
     float fadeDurationM = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexM = 0;
 
     // 재현 이미지
     vector<string> imageFilesJ = { "Jchat1.png","Jchat1.png", "Jchat2.png", "Jchat3.png", "Jchat4.png", "Jchat5.png", "Jchat6.png", "Jchat7.png", "Jchat8.png","Jchat8.png" };
@@ -559,9 +580,7 @@ int main()
     }
 
     // 타이밍을 위한 시계
-    Clock clockJ;
     float fadeDurationJ = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexJ = 0;
 
     // 한솔 이미지
     vector<string> imageFilesH = { "Hchat1.png","Hchat1.png", "Hchat2.png", "Hchat3.png", "Hchat4.png", "Hchat5.png", "Hchat6.png", "Hchat7.png", "Hchat8.png","Hchat8.png" };
@@ -590,9 +609,7 @@ int main()
 
 
     // 타이밍을 위한 시계
-    Clock clockH;
     float fadeDurationH = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexH = 0;
 
     // X 이미지
     vector<string> imageFilesX = { "Xchat1.png", "Xchat1.png", "Xchat2.png", "Xchat3.png", "Xchat4.png", "Xchat5.png", "Xchat6.png", "Xchat7.png", "Xchat8.png", "Xchat8.png" };
@@ -622,9 +639,7 @@ int main()
 
 
     // 타이밍을 위한 시계
-    Clock clockX;
     float fadeDurationX = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexX = 0;
 
     // chat 변수
 
@@ -643,7 +658,6 @@ int main()
     EndL.setPosition(initialX, initialY);
     EndL.setScale(0.25f, 0.25f);
     EndL.setOrigin(EndL.getGlobalBounds().width / 2, EndL.getGlobalBounds().height / 2);
-    sf::Clock clock2; // 애니메이션 시간 관리를 위한 시계
 
     Texture EndLH;
     EndLH.loadFromFile("EndLetterH.png");
@@ -696,7 +710,7 @@ int main()
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space && Screen1 && dice == true) {
                 rolling = true;
-                clock.restart(); // Restart the clock when space is pressed
+                clock0.restart(); // Restart the clock0 when space is pressed
                 timeAccumulator = 0.0f;
             }
 
@@ -854,6 +868,9 @@ int main()
                         else if (i == 12 && Screen1 && Number == 13 && (diceCount != Count + 1)) {
                             showImage1 = true;
                             Ch13 = true;
+                            chB13[0].setPosition(516.57, 218);
+                            chB13[1].setPosition(832.14, 218);
+                            chB13[2].setPosition(201, 218);
                             diceCount = Count + 1;
                         }
                         else if (i == 7 && Screen1 && Number == 8 && (diceCount != Count + 1)) {
@@ -1218,7 +1235,7 @@ int main()
 
         //주사위 시작 
         if (rolling && Count != 13) {
-            elapsedTime = clock.getElapsedTime();
+            elapsedTime = clock0.getElapsedTime();
             timeAccumulator += elapsedTime.asSeconds();
             if (timeAccumulator >= updateTime) {
                 timeAccumulator = 0.0f;
@@ -1471,7 +1488,7 @@ int main()
         // 엔딩 끝
 
         // 주사위 Click 이미지
-        if (Screen1 && Count != 13 && clock.getElapsedTime() >= delayTime) {
+        if (Screen1 && Count != 13 && clock0.getElapsedTime() >= delayTime) {
             switch (Number) {
                 // click2~7
             case 2:
