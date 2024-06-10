@@ -74,11 +74,11 @@ RenderWindow app(VideoMode(originalWidth, originalHeight), "EXchange Game");
 
 
 void resetGame() {
-    Number = 1; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+    Number = 13; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
     Jheart = 40;
     Hheart = 40;
-    Mheart = 90;
-    Xheart = 90;
+    Mheart = 40;
+    Xheart = 0;
     diceCount = 0;
     Screen1 = true;
     Hch1 = false, Hch1_2 = false, HchB = false, HchG = false, Hch2 = false;
@@ -1173,14 +1173,16 @@ int main()
                 if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                     if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos)) && !EndChSec) {
                         Ch13B = true;
-                        for (int j = 0; j < 3; j++) {
-                            if (i == j) {
-                                chB13[j].setTexture(chB13hover[j]);
-                                Ch13HMJ[j] = true;
-                            }
-                            else {
-                                chB13[j].setTexture(choice13[j]);
-                                Ch13HMJ[j] = false;
+                        if (Number == 13) {
+                            for (int j = 0; j < 3; j++) {
+                                if (i == j) {
+                                    chB13[j].setTexture(chB13hover[j]);
+                                    Ch13HMJ[j] = true;
+                                }
+                                else {
+                                    chB13[j].setTexture(choice13[j]);
+                                    Ch13HMJ[j] = false;
+                                }
                             }
                         }
                     }
