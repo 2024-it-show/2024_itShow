@@ -74,7 +74,7 @@ RenderWindow app(VideoMode(originalWidth, originalHeight), "EXchange Game");
 
 
 void resetGame() {
-    Number = 9; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+    Number = 1; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
     Jheart = 40;
     Hheart = 40;
     Mheart = 40;
@@ -1341,9 +1341,9 @@ int main()
                 app.draw(chB13[1]);
             }
             else if (Jheart >= 70 && Hheart >= 70) {
-                chB13[0].setPosition(358, 218);
+                chB13[2].setPosition(358, 218);
                 chB13[1].setPosition(673.57, 218);
-                app.draw(chB13[0]);
+                app.draw(chB13[2]);
                 app.draw(chB13[1]);
             }
         }
