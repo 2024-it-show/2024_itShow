@@ -1342,9 +1342,9 @@ int main()
             }
             else if (Jheart >= 70 && Hheart >= 70) {
                 chB13[2].setPosition(358, 218);
-                chB13[1].setPosition(673.57, 218);
+                chB13[0].setPosition(673.57, 218);
                 app.draw(chB13[2]);
-                 app.draw(chB13[1]);
+                app.draw(chB13[0]);
             }
         }
 
