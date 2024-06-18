@@ -120,19 +120,19 @@ void resetGame() {
     Ch13HMJ[1] = false;
     Ch13HMJ[2] = false;
 
-     clock1.restart();
-     clock0.restart();
-     clock2.restart();
-     clockM.restart();
-     clockJ.restart();
-     clockH.restart();
-     clockX.restart();
+    clock1.restart();
+    clock0.restart();
+    clock2.restart();
+    clockM.restart();
+    clockJ.restart();
+    clockH.restart();
+    clockX.restart();
 
 
-      currentImageIndexM = 0;
-      currentImageIndexJ = 0;
-      currentImageIndexH = 0;
-      currentImageIndexX = 0;
+    currentImageIndexM = 0;
+    currentImageIndexJ = 0;
+    currentImageIndexH = 0;
+    currentImageIndexX = 0;
 }
 
 int main()
@@ -714,8 +714,6 @@ int main()
                 timeAccumulator = 0.0f;
             }
 
-            if (Screen1 && dice == true)
-                dice1Sprite.setTexture(backgroundTexture1);
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Space && Screen1 && dice == true) {
                 //진짜 주사위 굴리기
                 int diceValue = rand() % 6;
@@ -1037,12 +1035,14 @@ int main()
                                 else if (random2 == 3) { rB_2_3 = true; Hheart += 10; }
                                 rB_2 = false;
                             }
+                            dice = true;
                         }
                         else if (i == 0 && Screen1) {
                             popup1 = false;
                             popup2 = false;
                             popup3 = false;
                             popup4 = false;
+                            dice = true;
                         }
                         // endChat 추가
                         else if (i == 2 && end_chat) {
@@ -1172,15 +1172,15 @@ int main()
                 if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                     if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos)) && !EndChSec) {
                         Ch13B = true;
-                            for (int j = 0; j < 3; j++) {
-                                if (i == j) {
-                                    chB13[j].setTexture(chB13hover[j]);
-                                    Ch13HMJ[j] = true;
-                                }
-                                else {
-                                    chB13[j].setTexture(choice13[j]);
-                                    Ch13HMJ[j] = false;
-                                }
+                        for (int j = 0; j < 3; j++) {
+                            if (i == j) {
+                                chB13[j].setTexture(chB13hover[j]);
+                                Ch13HMJ[j] = true;
+                            }
+                            else {
+                                chB13[j].setTexture(choice13[j]);
+                                Ch13HMJ[j] = false;
+                            }
                         }
                     }
                     if (!Ch13B) chB13[i].setTexture(choice13[i]);
@@ -1230,6 +1230,9 @@ int main()
             }
         }
 
+        if (Screen1 && dice == true)
+            dice1Sprite.setTexture(backgroundTexture1);
+
         if (Number == 1 && Count != 0) Number += 1;
 
         //주사위 시작 
@@ -1266,6 +1269,7 @@ int main()
                 if (i == 20) continue;
                 app.draw(button[i]);
             }//주사위
+
             if (showImage1) {
                 app.draw(dice1Sprite);
             }
@@ -1478,7 +1482,7 @@ int main()
             app.draw(realEnd);
             realEndBool = true;
         }
-        else if ((((Hheart < 70 && Mheart < 70 && Jheart < 70) )|| Xheart >= 70) && Count == 13 && end_chatSec) {
+        else if ((((Hheart < 70 && Mheart < 70 && Jheart < 70)) || Xheart >= 70) && Count == 13 && end_chatSec) {
             app.draw(EndBackSArr[3]);
             app.draw(realEnd);
             realEndBool = true;
@@ -1592,13 +1596,16 @@ int main()
         if (sB1) {
             app.draw(s_background[0]);
             app.draw(s_nextbutton[0]);
+            dice = false;
         }
         else if (sB2) {
             app.draw(s_background[1]);
             app.draw(s_nextbutton[1]);
+            dice = false;
         }
         else if (sB3) {
             app.draw(s_background[2]);
+            dice = false;
         }
 
         // 추가됨
@@ -1729,36 +1736,35 @@ int main()
 
         if (popup1 || popup2 || popup3 || popup4) {
             app.draw(PopUpBack);
-            if (popup1) {
-                app.draw(PopUp[0]);
+                if (popup1) {
+                    app.draw(PopUp[0]);
+                }
+                else if (popup2) {
+                    app.draw(PopUp[1]);
+                }
+                else if (popup3) {
+                    app.draw(PopUp[2]);
+                }
+                else if (popup4) {
+                    app.draw(PopUp[3]);
+                }
+                app.draw(nextbutton[0]);
             }
-            else if (popup2) {
-                app.draw(PopUp[1]);
+
+            if (chText) {
+                app.draw(text1);
+                app.draw(text2);
             }
-            else if (popup3) {
-                app.draw(PopUp[2]);
+            if (chSBTEXT) {
+                app.draw(chSBText);
             }
-            else if (popup4) {
-                app.draw(PopUp[3]);
-            }
-            app.draw(nextbutton[0]);
+
+            app.display();
         }
 
-        if (chText) {
-            app.draw(text1);
-            app.draw(text2);
-        }
-        if (chSBTEXT) {
-            app.draw(chSBText);
-        }
+        delete[] block;
+        delete[] blockhover;
+        delete[] button;
 
-        if (!popup1 && !popup2 && !popup3 && !popup4 && Count != 13 && Screen1 && !sB1 && !sB2 && !sB3) dice = true;
-        app.display();
-    }
-
-    delete[] block;
-    delete[] blockhover;
-    delete[] button;
-
-    return 0;
+        return 0;
 }
