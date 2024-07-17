@@ -251,6 +251,8 @@ int main()
     blockhover[22].loadFromFile("23h.png");
     blockhover[23].loadFromFile("24h.png");
 
+    bool Mainbuttonhover = false;
+
     //주사위 시작
     Texture diceTextures[6];
     string filePath = "dice";
@@ -766,13 +768,13 @@ int main()
             for (int i = 1; i < 24; i++) {
                 if (Number - 1 == i) {
                     if (button[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
-                        isButtonHovered = true;
+                        Mainbuttonhover = true;
                     }
                     else {
-                        isButtonHovered = false;
+                        Mainbuttonhover = false;
                     }
 
-                    if (isButtonHovered) {
+                    if (Mainbuttonhover) {
                         button[i].setTexture(blockhover[i]);
                     }
                     else {
@@ -970,9 +972,6 @@ int main()
 
                 if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                     if (nextbutton[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
-                        if (i == 2 && EndLetter) {
-                            EndChSec = true; Endch = false;
-                        }
                         if (i == 1 && Hch1) {
                             Hch1 = false;
                             Hch1_2 = true;
@@ -1005,6 +1004,7 @@ int main()
                                 else if (Ch13HMJ[2]) {
                                     Jheart += 15;
                                 }
+
                             }
                             for (int j = 0; j < 3; j++) Ch13HMJ[j] = false;
                             Ch13 = false; chSBTEXT = false;
@@ -1048,6 +1048,9 @@ int main()
                         else if (i == 2 && end_chat) {
                             end_chatSec = true;
                             EndLetter = false;
+                        }
+                        else if (i == 2 && Endch && (Ch13HMJ[0] || Ch13HMJ[1] || Ch13HMJ[2])) {
+                            EndChSec = true; Endch = false;
                         }
                     }
                 }
@@ -1171,6 +1174,7 @@ int main()
             for (int i = 0; i < 3; i++) {
                 if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                     if (chB13[i].getGlobalBounds().contains(static_cast<Vector2f>(mousePos)) && !EndChSec) {
+                        for (int j = 0; j < 3; j++) Ch13HMJ[j] = false;
                         Ch13B = true;
                         for (int j = 0; j < 3; j++) {
                             if (i == j) {
@@ -1183,7 +1187,7 @@ int main()
                             }
                         }
                     }
-                    if (!Ch13B) chB13[i].setTexture(choice13[i]);
+                    if (!Ch13B && !Endch) chB13[i].setTexture(choice13[i]);
                 }
             }
             if (EndL.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
@@ -1285,6 +1289,12 @@ int main()
         }
 
         //엔딩
+
+        if ((((Hheart < 70 && Mheart < 70 && Jheart < 70)) || Xheart >= 70) && Count == 13 && end_chatSec) {
+            app.draw(EndBackSArr[3]);
+            app.draw(realEnd);
+            realEndBool = true;
+        }
 
         if (((Jheart >= 70 && Hheart >= 70) || (Jheart >= 70 && Mheart >= 70) || (Mheart >= 70 && Hheart >= 70)
             || (Mheart >= 70 && Hheart >= 70 && Jheart >= 70)) && EndLetter && !EndChSec) {
@@ -1479,11 +1489,6 @@ int main()
         }
         else if (((Hheart >= 70 && Mheart < 70 && Jheart < 70) || (Hheart >= 70 && Ch13HMJ[0] && EndChSec)) && Count == 13 && end_chatSec) {
             app.draw(EndBackSArr[2]);
-            app.draw(realEnd);
-            realEndBool = true;
-        }
-        else if ((((Hheart < 70 && Mheart < 70 && Jheart < 70)) || Xheart >= 70) && Count == 13 && end_chatSec) {
-            app.draw(EndBackSArr[3]);
             app.draw(realEnd);
             realEndBool = true;
         }
@@ -1736,35 +1741,35 @@ int main()
 
         if (popup1 || popup2 || popup3 || popup4) {
             app.draw(PopUpBack);
-                if (popup1) {
-                    app.draw(PopUp[0]);
-                }
-                else if (popup2) {
-                    app.draw(PopUp[1]);
-                }
-                else if (popup3) {
-                    app.draw(PopUp[2]);
-                }
-                else if (popup4) {
-                    app.draw(PopUp[3]);
-                }
-                app.draw(nextbutton[0]);
+            if (popup1) {
+                app.draw(PopUp[0]);
             }
-
-            if (chText) {
-                app.draw(text1);
-                app.draw(text2);
+            else if (popup2) {
+                app.draw(PopUp[1]);
             }
-            if (chSBTEXT) {
-                app.draw(chSBText);
+            else if (popup3) {
+                app.draw(PopUp[2]);
             }
-
-            app.display();
+            else if (popup4) {
+                app.draw(PopUp[3]);
+            }
+            app.draw(nextbutton[0]);
         }
 
-        delete[] block;
-        delete[] blockhover;
-        delete[] button;
+        if (chText) {
+            app.draw(text1);
+            app.draw(text2);
+        }
+        if (chSBTEXT) {
+            app.draw(chSBText);
+        }
 
-        return 0;
+        app.display();
+    }
+
+    delete[] block;
+    delete[] blockhover;
+    delete[] button;
+
+    return 0;
 }

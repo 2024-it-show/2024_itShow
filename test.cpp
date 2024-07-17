@@ -20,17 +20,17 @@ bool Screen1;
 bool Hch1, Hch1_2, HchB, HchG, Hch2;
 bool Mch1, Mch1_2, Mch1B, Mch1G, Mch2, Mch2B, Mch2G, Mch;
 bool Jch1, JchG, JchB, Jch2, Jch;
-bool Hbasic1, Hbasic2, Jbasic1, Jbasic2, Mbasic1 , Mbasic2, Xbasic;
+bool Hbasic1, Hbasic2, Jbasic1, Jbasic2, Mbasic1, Mbasic2, Xbasic;
 bool Ch13;
 bool Ch13HMJ[3];
-bool dice ;
+bool dice;
 bool showImage1;
-bool rolling ;
-bool popup1, popup2 , popup3, popup4;
-bool chText ;
+bool rolling;
+bool popup1, popup2, popup3, popup4;
+bool chText;
 bool chSBTEXT;
 bool Ch13B;
-bool sB1;bool sB2; bool sB3;
+bool sB1; bool sB2; bool sB3;
 bool rB1;
 bool rB2;
 bool rB3;
@@ -42,29 +42,43 @@ bool rB_1_2;
 bool rB_1_3;
 
 bool rB_2;
-bool rB_2_1 ;
+bool rB_2_1;
 bool rB_2_2;
-bool rB_2_3 ;
+bool rB_2_3;
 bool end_chat, end_chatSec;
-bool EndChSec, Endch , EndR;
+bool EndChSec, Endch, EndR;
 bool EndLetter;
-bool animationStarted ;
-bool animationEnded ;
+bool animationStarted;
+bool animationEnded;
 bool realEndBool;
 
+Clock clock1;
+Clock clock2;
+Clock clock0;
+Clock clockM;
+Clock clockJ;
+Clock clockH;
+Clock clockX;
+
+
+size_t currentImageIndexM;
+size_t currentImageIndexJ;
+size_t currentImageIndexH;
+size_t currentImageIndexX;
 
 
 const unsigned int originalWidth = 1280;
 const unsigned int originalHeight = 720;
 
-RenderWindow app(VideoMode(originalWidth, originalHeight), "game");
+
+RenderWindow app(VideoMode(originalWidth, originalHeight), "EXchange Game");
 
 
 void resetGame() {
-    Number = 19; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
-    Jheart = 90;
-    Hheart = 90;
-    Mheart = 90;
+    Number = 1; // 주사위 누적값 변수입니다. 24가 넘어가면 24를 빼줘야 해용
+    Jheart = 40;
+    Hheart = 40;
+    Mheart = 40;
     Xheart = 0;
     diceCount = 0;
     Screen1 = true;
@@ -74,42 +88,65 @@ void resetGame() {
     Hbasic1 = false, Hbasic2 = false, Jbasic1 = false, Jbasic2 = false, Mbasic1 = false, Mbasic2 = false, Xbasic = false;
     Ch13 = false;
     Count = 0;
-     dice = true;
-     showImage1 = true;
-     rolling = false;
-     popup1 = false, popup2 = false, popup3 = false, popup4 = false;
-     chText = false;
-     chSBTEXT = false;
-     Ch13B = false;
-     sB1 = true, sB2 = false, sB3 = false;
-     rB1 = false;
-     rB2 = false;
-     rB3 = false;
-     rB4 = false;
+    dice = true;
+    showImage1 = true;
+    rolling = false;
+    popup1 = false, popup2 = false, popup3 = false, popup4 = false;
+    chText = false;
+    chSBTEXT = false;
+    Ch13B = false;
+    sB1 = true, sB2 = false, sB3 = false;
+    rB1 = false;
+    rB2 = false;
+    rB3 = false;
+    rB4 = false;
 
-     rB_1 = false;
-     rB_1_1 = false;
-     rB_1_2 = false;
-     rB_1_3 = false;
+    rB_1 = false;
+    rB_1_1 = false;
+    rB_1_2 = false;
+    rB_1_3 = false;
 
-     rB_2 = false;
-     rB_2_1 = false;
-     rB_2_2 = false;
-     rB_2_3 = false;
-     end_chat = false, end_chatSec = false;
-     EndChSec = false, Endch = false, EndR = false;
-     EndLetter = false;
-     animationStarted = false;
-     animationEnded = false;
+    rB_2 = false;
+    rB_2_1 = false;
+    rB_2_2 = false;
+    rB_2_3 = false;
+    end_chat = false, end_chatSec = false;
+    EndChSec = false, Endch = false, EndR = false;
+    EndLetter = false;
+    animationStarted = false;
+    animationEnded = false;
     realEndBool = false;
 
     Ch13HMJ[0] = false;
     Ch13HMJ[1] = false;
     Ch13HMJ[2] = false;
+
+    clock1.restart();
+    clock0.restart();
+    clock2.restart();
+    clockM.restart();
+    clockJ.restart();
+    clockH.restart();
+    clockX.restart();
+
+
+    currentImageIndexM = 0;
+    currentImageIndexJ = 0;
+    currentImageIndexH = 0;
+    currentImageIndexX = 0;
 }
 
 int main()
 {
+    sf::Image icon;
+    if (!icon.loadFromFile("click20~24.png")) {
+        std::cerr << "Failed to load icon" << std::endl;
+        return -1;
+    }
+
+    // 윈도우 아이콘 설정
+    app.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
     resetGame();
 
     Font font;
@@ -266,13 +303,12 @@ int main()
 
     srand(static_cast<unsigned>(std::time(nullptr)));
 
-    Clock clock;
+
 
     float timeAccumulator = 0.0f;
     const float updateTime = 0.2f;
     const float totalRollingTime = 0.5f;
     Time elapsedTime;
-    Clock clock1;
     Time delayTime = sf::seconds(0.5f);
 
 
@@ -332,7 +368,7 @@ int main()
         PopUp[i].setScale(0.25f, 0.25f);
         PopUp[i].setPosition(396, 206);
     }
-    
+
 
     Texture popBack;
     popBack.loadFromFile("pop-back.png");
@@ -371,9 +407,6 @@ int main()
         chB13[i].setTexture(choice13[i]);
         chB13[i].setScale(0.25f, 0.25f);
     }
-    chB13[0].setPosition(516.57, 218);
-    chB13[1].setPosition(832.14, 218);
-    chB13[2].setPosition(201, 218);
     Texture chB13hover[3];
     chB13hover[0].loadFromFile("ch13HBh.png");
     chB13hover[1].loadFromFile("ch13MBh.png");
@@ -495,15 +528,16 @@ int main()
     Texture backgroundTexture;
     backgroundTexture.loadFromFile("ChatBack.png");
     Sprite backgroundSprite(backgroundTexture);
+    backgroundSprite.setScale(0.25f, 0.25f);
 
     // 민재 이미지
-    vector<string> imageFilesM = { "Mchat1.png", "Mchat2.png", "Mchat3.png", "Mchat4.png", "Mchat5.png", "Mchat6.png", "Mchat7.png", "Mchat8.png","Mchat8.png" };
+    vector<string> imageFilesM = { "Mchat1.png", "Mchat1.png", "Mchat2.png", "Mchat3.png", "Mchat4.png", "Mchat5.png", "Mchat6.png", "Mchat7.png", "Mchat8.png","Mchat8.png" };
     vector<Texture> overlayTexturesM(imageFilesM.size());
     vector<Sprite> overlaySpritesM(imageFilesM.size());
 
     // 각 이미지의 크기와 위치를 저장할 벡터
-    vector<Vector2f> sizesM = { {269, 65}, {257, 63}, {313, 40}, {255, 40}, {296, 63}, {276, 40}, {292, 41}, {150, 41},{0,0} };
-    vector<Vector2f> positionsM = { {446, 77}, {495, 155}, {495, 233}, {495, 288}, {495, 343}, {495, 421}, {495, 476}, {495, 532} ,{0,0} };
+    vector<Vector2f> sizesM = { {0,0}, { 269, 65 }, {257, 63}, {313, 40}, {255, 40}, {296, 63}, {276, 40}, {292, 41}, {150, 41},{0,0} };
+    vector<Vector2f> positionsM = { {0,0},{446, 77}, {495, 155}, {495, 233}, {495, 288}, {495, 343}, {495, 421}, {495, 476}, {495, 532} ,{0,0} };
 
     // 오버레이 이미지 로드
     for (size_t i = 0; i < imageFilesM.size(); ++i)
@@ -525,18 +559,16 @@ int main()
     }
 
     // 타이밍을 위한 시계
-    Clock clockM;
     float fadeDurationM = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexM = 0;
 
     // 재현 이미지
-    vector<string> imageFilesJ = { "Jchat1.png", "Jchat2.png", "Jchat3.png", "Jchat4.png", "Jchat5.png", "Jchat6.png", "Jchat7.png", "Jchat8.png","Jchat8.png" };
+    vector<string> imageFilesJ = { "Jchat1.png","Jchat1.png", "Jchat2.png", "Jchat3.png", "Jchat4.png", "Jchat5.png", "Jchat6.png", "Jchat7.png", "Jchat8.png","Jchat8.png" };
     vector<Texture> overlayTexturesJ(imageFilesJ.size());
     vector<Sprite> overlaySpritesJ(imageFilesJ.size());
 
     // 각 이미지의 크기와 위치를 저장할 벡터
-    vector<Vector2f> sizesJ = { {306, 52}, {282, 63}, {234, 63}, {290, 40}, {282, 40}, {279, 63}, {274, 63}, {137, 41},{0,0} };
-    vector<Vector2f> positionsJ = { {446, 86}, {495, 138}, {495, 216}, {495, 294}, {495, 349}, {495, 404}, {495, 482}, {495, 560},{0,0} };
+    vector<Vector2f> sizesJ = { {0,0},{306, 52}, {282, 63}, {234, 63}, {290, 40}, {282, 40}, {279, 63}, {274, 63}, {137, 41},{0,0} };
+    vector<Vector2f> positionsJ = { {0,0}, {446, 86}, {495, 138}, {495, 216}, {495, 294}, {495, 349}, {495, 404}, {495, 482}, {495, 560},{0,0} };
 
     // 오버레이 이미지 로드
     for (size_t i = 0; i < imageFilesJ.size(); ++i)
@@ -558,17 +590,15 @@ int main()
     }
 
     // 타이밍을 위한 시계
-    Clock clockJ;
     float fadeDurationJ = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexJ = 0;
 
     // 한솔 이미지
-    vector<string> imageFilesH = { "Hchat1.png", "Hchat2.png", "Hchat3.png", "Hchat4.png", "Hchat5.png", "Hchat6.png", "Hchat7.png", "Hchat8.png","Hchat8.png" };
+    vector<string> imageFilesH = { "Hchat1.png","Hchat1.png", "Hchat2.png", "Hchat3.png", "Hchat4.png", "Hchat5.png", "Hchat6.png", "Hchat7.png", "Hchat8.png","Hchat8.png" };
     vector<Texture> overlayTexturesH(imageFilesH.size());
     vector<Sprite> overlaySpritesH(imageFilesH.size());
 
-    vector<Vector2f> sizesH = { {300, 65}, {310, 40}, {231, 40}, {279, 63}, {265, 40}, {251, 63}, {323, 40}, {195, 41},{0,0} };
-    vector<Vector2f> positionsH = { {446, 77}, {495, 155}, {495, 210}, {495, 265}, {495, 343}, {495, 398}, {495, 476}, {495, 531},{0,0} };
+    vector<Vector2f> sizesH = { {0,0},{300, 65}, {310, 40}, {231, 40}, {279, 63}, {265, 40}, {251, 63}, {323, 40}, {195, 41},{0,0} };
+    vector<Vector2f> positionsH = { {0,0},{446, 77}, {495, 155}, {495, 210}, {495, 265}, {495, 343}, {495, 398}, {495, 476}, {495, 531},{0,0} };
 
     for (size_t i = 0; i < imageFilesH.size(); ++i)
     {
@@ -589,17 +619,15 @@ int main()
 
 
     // 타이밍을 위한 시계
-    Clock clockH;
     float fadeDurationH = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexH = 0;
 
     // X 이미지
-    vector<string> imageFilesX = { "Xchat1.png", "Xchat2.png", "Xchat3.png", "Xchat4.png", "Xchat5.png", "Xchat6.png", "Xchat7.png", "Xchat8.png", "Xchat8.png"};
+    vector<string> imageFilesX = { "Xchat1.png", "Xchat1.png", "Xchat2.png", "Xchat3.png", "Xchat4.png", "Xchat5.png", "Xchat6.png", "Xchat7.png", "Xchat8.png", "Xchat8.png" };
     vector<Texture> overlayTexturesX(imageFilesX.size());
     vector<Sprite> overlaySpritesX(imageFilesX.size());
 
-    std::vector<sf::Vector2f> sizesX = { {308, 52}, {236, 59}, {265, 63}, {207, 63}, {242, 63}, {220, 63}, {269, 40}, {129, 41} ,{0,0} };
-    std::vector<sf::Vector2f> positionsX = { {446, 86}, {495, 143}, {495, 217}, {495, 299}, {495, 377}, {495, 455}, {495, 533}, {495, 588},{0,0} };
+    std::vector<sf::Vector2f> sizesX = { {0,0},{308, 52}, {236, 59}, {265, 63}, {207, 63}, {242, 63}, {220, 63}, {269, 40}, {129, 41} ,{0,0} };
+    std::vector<sf::Vector2f> positionsX = { {0,0}, {446, 86}, {495, 143}, {495, 217}, {495, 299}, {495, 377}, {495, 455}, {495, 533}, {495, 588},{0,0} };
 
 
     for (size_t i = 0; i < imageFilesX.size(); ++i)
@@ -621,9 +649,7 @@ int main()
 
 
     // 타이밍을 위한 시계
-    Clock clockX;
     float fadeDurationX = 2.0f; // 각 페이드 인의 지속 시간 (초 단위)
-    size_t currentImageIndexX = 0;
 
     // chat 변수
 
@@ -642,7 +668,6 @@ int main()
     EndL.setPosition(initialX, initialY);
     EndL.setScale(0.25f, 0.25f);
     EndL.setOrigin(EndL.getGlobalBounds().width / 2, EndL.getGlobalBounds().height / 2);
-    sf::Clock clock2; // 애니메이션 시간 관리를 위한 시계
 
     Texture EndLH;
     EndLH.loadFromFile("EndLetterH.png");
@@ -695,12 +720,10 @@ int main()
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space && Screen1 && dice == true) {
                 rolling = true;
-                clock.restart(); // Restart the clock when space is pressed
+                clock0.restart(); // Restart the clock0 when space is pressed
                 timeAccumulator = 0.0f;
             }
 
-            if (Screen1 && dice == true)
-                dice1Sprite.setTexture(backgroundTexture1);
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Space && Screen1 && dice == true) {
                 //진짜 주사위 굴리기
                 int diceValue = rand() % 6;
@@ -800,7 +823,6 @@ int main()
                             showImage1 = true;
                             Screen1 = false;
                             Mch1 = true;
-                            Mheart += 15;
                             diceCount = Count + 1;
                         }
                         else if (i == 11 && Screen1 && Number == 12 && (diceCount != Count + 1)) {
@@ -853,6 +875,9 @@ int main()
                         else if (i == 12 && Screen1 && Number == 13 && (diceCount != Count + 1)) {
                             showImage1 = true;
                             Ch13 = true;
+                            chB13[0].setPosition(516.57, 218);
+                            chB13[1].setPosition(832.14, 218);
+                            chB13[2].setPosition(201, 218);
                             diceCount = Count + 1;
                         }
                         else if (i == 7 && Screen1 && Number == 8 && (diceCount != Count + 1)) {
@@ -908,7 +933,7 @@ int main()
                             Xbasic = true;
                             Screen1 = false;
                             Xheart += 15;
-                            diceCount =Count + 1;
+                            diceCount = Count + 1;
                         }
                         else if ((i == 5 || i == 9 || i == 16 || i == 21) && Screen1 && (Number == 6 || Number == 10 || Number == 17 || Number == 22) && (diceCount != Count + 1)) {
                             showImage1 = true;
@@ -1007,7 +1032,7 @@ int main()
                                 rB2 = false;
                                 if (random1 == 1) { Mheart -= 10; rB_1_1 = true; }
                                 else if (random1 == 2) { rB_1_2 = true; Jheart -= 10; }
-                                else if (random1 == 3) { rB_1_3 = true; Hheart = 10; }
+                                else if (random1 == 3) { rB_1_3 = true; Hheart -= 10; }
                                 rB_1 = false;
                             }
                             else if (rB3) {
@@ -1020,15 +1045,17 @@ int main()
                                 else if (random2 == 3) { rB_2_3 = true; Hheart += 10; }
                                 rB_2 = false;
                             }
+                            dice = true;
                         }
                         else if (i == 0 && Screen1) {
                             popup1 = false;
                             popup2 = false;
                             popup3 = false;
                             popup4 = false;
+                            dice = true;
                         }
                         // endChat 추가
-                        else if (i==2&&end_chat) {
+                        else if (i == 2 && end_chat) {
                             end_chatSec = true;
                             EndLetter = false;
                         }
@@ -1187,6 +1214,7 @@ int main()
                         Screen1 = false;
                         EndR = false;
                         EndLetter = true;
+                        for (int i = 0; i < 3; i++) chB13[i].setTexture(choice13[i]);
                     }
                 }
             }
@@ -1212,11 +1240,14 @@ int main()
             }
         }
 
+        if (Screen1 && dice == true)
+            dice1Sprite.setTexture(backgroundTexture1);
+
         if (Number == 1 && Count != 0) Number += 1;
 
         //주사위 시작 
         if (rolling && Count != 13) {
-            elapsedTime = clock.getElapsedTime();
+            elapsedTime = clock0.getElapsedTime();
             timeAccumulator += elapsedTime.asSeconds();
             if (timeAccumulator >= updateTime) {
                 timeAccumulator = 0.0f;
@@ -1248,6 +1279,7 @@ int main()
                 if (i == 20) continue;
                 app.draw(button[i]);
             }//주사위
+
             if (showImage1) {
                 app.draw(dice1Sprite);
             }
@@ -1323,10 +1355,10 @@ int main()
                 app.draw(chB13[1]);
             }
             else if (Jheart >= 70 && Hheart >= 70) {
-                chB13[0].setPosition(358, 218);
-                chB13[1].setPosition(673.57, 218);
+                chB13[2].setPosition(358, 218);
+                chB13[0].setPosition(673.57, 218);
+                app.draw(chB13[2]);
                 app.draw(chB13[0]);
-                app.draw(chB13[1]);
             }
         }
 
@@ -1384,7 +1416,7 @@ int main()
                 }
             }
         }
-        else if (((Hheart < 70 && Mheart < 70 && Jheart < 70) || Xheart >= 70) &&Count == 13 && EndLetter) {
+        else if (((Hheart < 70 && Mheart < 70 && Jheart < 70) || Xheart >= 70) && Count == 13 && EndLetter) {
             Screen1 = false;
             float elapsedTimeX = clockX.getElapsedTime().asSeconds();
 
@@ -1423,7 +1455,7 @@ int main()
             if (i >= overlaySpritesM.size()) app.draw(nextbutton[2]);
             end_chat = true;
         }
-        else if (((Hheart >= 70 && Mheart < 70 && Jheart < 70 && EndLetter) || (Hheart >= 70 && Ch13HMJ[0] && EndChSec)) &&Count == 13) {
+        else if (((Hheart >= 70 && Mheart < 70 && Jheart < 70 && EndLetter) || (Hheart >= 70 && Ch13HMJ[0] && EndChSec)) && Count == 13) {
             app.draw(backgroundSprite);
             size_t i = 0;
             for (; i <= currentImageIndexH && i < overlaySpritesH.size(); ++i)
@@ -1450,17 +1482,17 @@ int main()
             app.draw(realEnd);
             realEndBool = true;
         }
-        else if (((Mheart >= 70 && Jheart < 70 && Hheart < 70 ) || (Mheart >= 70 && Ch13HMJ[1] && EndChSec)) && Count == 13 && end_chatSec) {
+        else if (((Mheart >= 70 && Jheart < 70 && Hheart < 70) || (Mheart >= 70 && Ch13HMJ[1] && EndChSec)) && Count == 13 && end_chatSec) {
             app.draw(EndBackSArr[1]);
             app.draw(realEnd);
             realEndBool = true;
         }
-        else if (((Hheart >= 70 && Mheart < 70 && Jheart < 70 ) || (Hheart >= 70 && Ch13HMJ[0] && EndChSec)) && Count == 13 && end_chatSec) {
+        else if (((Hheart >= 70 && Mheart < 70 && Jheart < 70) || (Hheart >= 70 && Ch13HMJ[0] && EndChSec)) && Count == 13 && end_chatSec) {
             app.draw(EndBackSArr[2]);
             app.draw(realEnd);
             realEndBool = true;
         }
-        else if (((Hheart < 70 && Mheart < 70 && Jheart < 70) || Xheart >= 70) && Count == 13 && end_chatSec) {
+        else if ((((Hheart < 70 && Mheart < 70 && Jheart < 70)) || Xheart >= 70) && Count == 13 && end_chatSec) {
             app.draw(EndBackSArr[3]);
             app.draw(realEnd);
             realEndBool = true;
@@ -1469,7 +1501,7 @@ int main()
         // 엔딩 끝
 
         // 주사위 Click 이미지
-        if (Screen1 && Count != 13 && clock.getElapsedTime() >= delayTime) {
+        if (Screen1 && Count != 13 && clock0.getElapsedTime() >= delayTime) {
             switch (Number) {
                 // click2~7
             case 2:
@@ -1574,13 +1606,16 @@ int main()
         if (sB1) {
             app.draw(s_background[0]);
             app.draw(s_nextbutton[0]);
+            dice = false;
         }
         else if (sB2) {
             app.draw(s_background[1]);
             app.draw(s_nextbutton[1]);
+            dice = false;
         }
         else if (sB3) {
             app.draw(s_background[2]);
+            dice = false;
         }
 
         // 추가됨
@@ -1734,7 +1769,6 @@ int main()
             app.draw(chSBText);
         }
 
-        if (!popup1 && !popup2 && !popup3 && !popup4 && Count != 13 && Screen1&&!sB1&&!sB2&&sB3) dice = true;
         app.display();
     }
 
